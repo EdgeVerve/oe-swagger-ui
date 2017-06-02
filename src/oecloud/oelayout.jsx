@@ -22,12 +22,13 @@ export default class OeCloudLayout extends React.Component {
     // const Topbar = getComponent("Topbar", true)
     const BaseLayout = getComponent("BaseLayout", true)
     // const OnlineValidatorBadge = getComponent("onlineValidatorBadge", true)
+    const Banner = getComponent("Banner", true)
 
     const loadingStatus = specSelectors.loadingStatus()
 
     return (
-
       <Container className='swagger-ui'>
+        <Banner/>
         { loadingStatus === "loading" &&
           <div className="info">
             <h4 className="title">Loading...</h4>
