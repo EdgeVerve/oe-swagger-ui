@@ -7,7 +7,7 @@ module.exports = require("./make-webpack-config")({
     },
     separateStylesheets: false,
   },
-	devtool: "eval",
+	devtool: "inline",
   entry: {
     'swagger-ui-bundle': [
       'babel-polyfill',
