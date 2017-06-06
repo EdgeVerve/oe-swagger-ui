@@ -43,7 +43,7 @@ export default class Operations extends React.Component {
               let tagDescription = tagObj.getIn(["tagDetails", "description"], null)
 
               let isShownKey = ["operations-tag", tag]
-              let showTag = layoutSelectors.isShown(isShownKey, true)
+              let showTag = layoutSelectors.isShown(isShownKey, false)
 
               return (
                 <div className={showTag ? "opblock-tag-section is-open" : "opblock-tag-section"} key={"operation-" + tag}>
