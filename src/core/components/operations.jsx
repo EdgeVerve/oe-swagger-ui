@@ -10,6 +10,7 @@ export default class Operations extends React.Component {
     layoutActions: PropTypes.object.isRequired,
     authActions: PropTypes.object.isRequired,
     authSelectors: PropTypes.object.isRequired,
+    getConfigs: PropTypes.func.isRequired
   };
 
   static defaultProps = {
@@ -25,6 +26,7 @@ export default class Operations extends React.Component {
       layoutActions,
       authActions,
       authSelectors,
+      getConfigs,
       fn
     } = this.props
 
@@ -34,6 +36,7 @@ export default class Operations extends React.Component {
     const Collapse = getComponent("Collapse")
 
     let showSummary = layoutSelectors.showSummary()
+    let { docExpansion } = getConfigs()
 
     return (
         <div>
@@ -43,7 +46,11 @@ export default class Operations extends React.Component {
               let tagDescription = tagObj.getIn(["tagDetails", "description"], null)
 
               let isShownKey = ["operations-tag", tag]
-              let showTag = layoutSelectors.isShown(isShownKey, false)
+// <<<<<<< HEAD
+//               let showTag = layoutSelectors.isShown(isShownKey, false)
+// =======
+              let showTag = layoutSelectors.isShown(isShownKey, docExpansion === "full" || docExpansion === "list")
+// >>>>>>> 12dd90f748b3f22cfdd973f437b51812244b4971
 
               return (
                 <div className={showTag ? "opblock-tag-section is-open" : "opblock-tag-section"} key={"operation-" + tag}>
@@ -98,6 +105,7 @@ export default class Operations extends React.Component {
 
                           getComponent={ getComponent }
                           fn={fn}
+                          getConfigs={ getConfigs }
                         />
                       }).toArray()
                     }

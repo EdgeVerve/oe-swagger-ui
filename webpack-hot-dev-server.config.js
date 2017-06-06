@@ -10,13 +10,16 @@ module.exports = require("./make-webpack-config")({
 	devtool: "inline",
   entry: {
     'swagger-ui-bundle': [
+      'webpack/hot/dev-server',
       'babel-polyfill',
-      './src/core/index.js'
+      './src/core/index.js',
     ],
     'swagger-ui-standalone-preset': [
+      'webpack/hot/dev-server',
       './src/standalone/index.js'
     ],
     'swagger-ui-oecloud-preset' : [
+      'webpack/hot/dev-server',
       './src/oecloud/index.js'
     ]
   },
