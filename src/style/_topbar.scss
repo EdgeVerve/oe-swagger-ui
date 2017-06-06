@@ -11,9 +11,8 @@
     }
     a
     {
-        font-size: 1.5em;
         font-weight: bold;
-
+        font-size: 16pt;
         display: flex;
 
         max-width: 300px;
@@ -31,34 +30,27 @@
         }
     }
 
-    .download-url-wrapper
+    .set-token-wrapper
     {
         display: flex;
-
         flex: 3;
 
         input[type=text]
         {
-            width: 100%;
-            min-width: 350px;
             margin: 0;
-
+            min-width: 350px;
             border: 2px solid #547f00;
             border-radius: 4px 0 0 4px;
             outline: none;
         }
 
-        .download-url-button
+        .set-token-button
         {
-            font-size: 16px;
             font-weight: bold;
-
             padding: 4px 40px;
-
             border: none;
             border-radius: 0 4px 4px 0;
             background: #547f00;
-
             @include text_headline(#fff);
         }
     }

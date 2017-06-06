@@ -12,7 +12,6 @@ export default class Banner extends React.Component {
   }
 
   componentDidMount() {
-    console.log('once');
     if (window.localStorage) {
       let key = window.localStorage.getItem(lsKey);
       if (key) {
@@ -22,24 +21,17 @@ export default class Banner extends React.Component {
   }
 
   setAccessToken(e) {
+    let { target } = e, form = target;
+    let input = form.getElementsByTagName('input')[0];
+    let token = input.value;
 
-    let { access_token } = this.state
-
-    this.updateToken(access_token)
-
+    this.updateToken(token);
     if(e) e.preventDefault();
   }
 
   updateToken(token) {
     let { authActions } = this.props
     authActions.updateAccessToken(token)
-  }
-
-  onTextChange(e) {
-    let {target: {value} } = e;
-    this.setState({
-      access_token: value
-    });
   }
 
   getAccessToken() {
@@ -59,17 +51,17 @@ export default class Banner extends React.Component {
     let accessToken = authSelectors.getAccessToken();
 
     accessToken = accessToken ? accessToken : '';
-
+    console.log('accessToken:', accessToken);
     return (
         <div className="topbar">
           <div className="wrapper">
             <div className="topbar-wrapper">
               <Link href="#" title="Swagger UX">
-                <span>oeCloud.io</span>
+                <span>oeCloud.io API Explorer</span>
               </Link>
-              <form className="download-url-wrapper" onSubmit={this.setAccessToken.bind(this)}>
-                <input className="download-url-input" placeholder="Input an access token here" type="text" onChange={ this.onTextChange.bind(this) } value={ accessToken } />
-                <Button className="download-url-button">Set Token</Button>
+              <form className="set-token-wrapper" onSubmit={ this.setAccessToken.bind(this) }>
+                <input className="set-token-input" type="text" value={ accessToken } />
+                <Button className="set-token-button">Set Token</Button>
               </form>
             </div>
           </div>
