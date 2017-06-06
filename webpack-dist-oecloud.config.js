@@ -13,7 +13,6 @@ module.exports = require('./make-webpack-config.js')({
 
   entry: {
     'swagger-ui-oecloud-preset': [
-      'babel-polyfill',
       './src/oecloud/index.js'
     ]
   },
