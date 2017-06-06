@@ -15,11 +15,11 @@ module.exports = require("./make-webpack-config")({
       './src/core/index.js',
     ],
     'swagger-ui-standalone-preset': [
-      'webpack/hot/dev-server',
+      // 'webpack/hot/dev-server',
       './src/standalone/index.js'
     ],
     'swagger-ui-oecloud-preset' : [
-      'webpack/hot/dev-server',
+      // 'webpack/hot/dev-server',
       './src/oecloud/index.js'
     ]
   },
