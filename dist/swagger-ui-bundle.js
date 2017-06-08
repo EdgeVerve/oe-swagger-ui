@@ -74,7 +74,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	"showRequestHeaders", "custom", "modelPropertyMacro", "parameterMacro"];
 
 	// eslint-disable-next-line no-undef
-	var _buildInfo = ({"PACKAGE_VERSION":"3.0.13","GIT_COMMIT":"gf8a3dcf","GIT_DIRTY":true}),GIT_DIRTY = _buildInfo.GIT_DIRTY,GIT_COMMIT = _buildInfo.GIT_COMMIT,PACKAGE_VERSION = _buildInfo.PACKAGE_VERSION;
+	var _buildInfo = ({"PACKAGE_VERSION":"3.0.13","GIT_COMMIT":"ged57119","GIT_DIRTY":true}),GIT_DIRTY = _buildInfo.GIT_DIRTY,GIT_COMMIT = _buildInfo.GIT_COMMIT,PACKAGE_VERSION = _buildInfo.PACKAGE_VERSION;
 
 	module.exports = function SwaggerUI(opts) {
 
@@ -108465,6 +108465,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    onChange = function (e) {
+	      // console.log(this);
 	      var value = _this2.props.schema["type"] === "file" ? e.target.files[0] : e.target.value;
 	      _this2.props.onChange(value, _this2.props.keyName);
 	    }, _this2.

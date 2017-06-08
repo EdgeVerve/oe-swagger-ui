@@ -46,6 +46,7 @@ export class JsonSchema_string extends Component {
   static propTypes = JsonSchemaPropShape
   static defaultProps = JsonSchemaDefaultProps
   onChange = (e) => {
+    // console.log(this);
     const value = this.props.schema["type"] === "file" ? e.target.files[0] : e.target.value
     this.props.onChange(value, this.props.keyName)
   }

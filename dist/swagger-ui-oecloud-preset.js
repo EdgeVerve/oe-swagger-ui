@@ -17300,26 +17300,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function Banner(props, context) {_classCallCheck(this, Banner);
 
 	    // let token = this.getAccessToken();
-	    var _this = _possibleConstructorReturn(this, (Banner.__proto__ || Object.getPrototypeOf(Banner)).call(this, props, context));_this.state = { access_token: null };return _this;
+	    var _this = _possibleConstructorReturn(this, (Banner.__proto__ || Object.getPrototypeOf(Banner)).call(this, props, context));_this.state = { access_token: null };
+	    _this.handleChange = _this.onChange.bind(_this);
+	    _this.handleSubmit = _this.onSubmit.bind(_this);return _this;
 	  }_createClass(Banner, [{ key: "componentDidMount", value: function componentDidMount()
 
 	    {
+	      var key = null;
 	      if (_window2.default.localStorage) {
-	        var key = _window2.default.localStorage.getItem(lsKey);
+	        key = _window2.default.localStorage.getItem(lsKey);
 	        if (key) {
 	          this.updateToken(key);
 	        }
 	      }
-	    } }, { key: "setAccessToken", value: function setAccessToken(
+	      this.setState({ access_token: key });
+	    } }, { key: "onChange", value: function onChange(
 
 	    e) {
-	      console.log('set token');
-	      var target = e.target,form = target;
-	      var input = form.getElementsByTagName('input')[0];
-	      var token = input.value;
+	      this.setState({ access_token: e.target.value });
+	    } }, { key: "onSubmit", value: function onSubmit(
 
+	    e) {
+	      var token = this.state.access_token;
 	      this.updateToken(token.length ? token : null);
-	      if (e) e.preventDefault();
+	      this.setState({ access_token: token });
+	      e.preventDefault();
 	    } }, { key: "updateToken", value: function updateToken(
 
 	    token) {var _props =
@@ -17342,9 +17347,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.props,getComponent = _props2.getComponent,authSelectors = _props2.authSelectors,authActions = _props2.authActions;
 	      var Button = getComponent("Button");
 	      var Link = getComponent("Link");
-	      var accessToken = authSelectors.getAccessToken();
-
-	      accessToken = accessToken ? accessToken : '';
+	      var accessToken = this.state.access_token ? this.state.access_token : '';
+	      //
+	      // accessToken = accessToken ? accessToken : '';
 	      // console.log('accessToken:', accessToken);
 	      return (
 	        _react2.default.createElement("div", { className: "topbar" },
@@ -17353,8 +17358,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	              _react2.default.createElement(Link, { href: "#", title: "Swagger UX" },
 	                _react2.default.createElement("span", null, "oeCloud.io API Explorer")),
 
-	              _react2.default.createElement("form", { className: "set-token-wrapper", onSubmit: this.setAccessToken.bind(this) },
-	                _react2.default.createElement("input", { className: "set-token-input", type: "text", defaultValue: accessToken }),
+	              _react2.default.createElement("form", { className: "set-token-wrapper", onSubmit: this.handleSubmit },
+	                _react2.default.createElement("input", { className: "set-token-input", type: "text", value: accessToken, onChange: this.handleChange }),
 	                _react2.default.createElement(Button, { className: "set-token-button" }, "Set Token"))))));
 
 

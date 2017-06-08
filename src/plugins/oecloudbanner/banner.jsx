@@ -9,25 +9,30 @@ export default class Banner extends React.Component {
     super(props, context)
     // let token = this.getAccessToken();
     this.state = { access_token: null }
+    this.handleChange = this.onChange.bind(this);
+    this.handleSubmit = this.onSubmit.bind(this);
   }
 
   componentDidMount() {
+    let key = null;
     if (window.localStorage) {
-      let key = window.localStorage.getItem(lsKey);
+      key = window.localStorage.getItem(lsKey);
       if (key) {
         this.updateToken(key)
       }
     }
+    this.setState({ access_token: key });
   }
 
-  setAccessToken(e) {
-    console.log('set token');
-    let { target } = e, form = target;
-    let input = form.getElementsByTagName('input')[0];
-    let token = input.value;
+  onChange(e) {
+    this.setState({ access_token: e.target.value });
+  }
 
+  onSubmit(e) {
+    let token = this.state.access_token;
     this.updateToken(token.length ? token: null);
-    if(e) e.preventDefault();
+    this.setState({ access_token: token })
+    e.preventDefault();
   }
 
   updateToken(token) {
@@ -50,9 +55,9 @@ export default class Banner extends React.Component {
     let { getComponent, authSelectors, authActions } = this.props
     const Button = getComponent("Button")
     const Link = getComponent("Link")
-    let accessToken = authSelectors.getAccessToken();
-
-    accessToken = accessToken ? accessToken : '';
+    let accessToken = this.state.access_token ? this.state.access_token : '';
+    //
+    // accessToken = accessToken ? accessToken : '';
     // console.log('accessToken:', accessToken);
     return (
         <div className="topbar">
@@ -61,8 +66,8 @@ export default class Banner extends React.Component {
               <Link href="#" title="Swagger UX">
                 <span>oeCloud.io API Explorer</span>
               </Link>
-              <form className="set-token-wrapper" onSubmit={ this.setAccessToken.bind(this) }>
-                <input className="set-token-input" type="text" defaultValue={ accessToken } />
+              <form className="set-token-wrapper" onSubmit={ this.handleSubmit }>
+                <input className="set-token-input" type="text" value={ accessToken } onChange={ this.handleChange } />
                 <Button className="set-token-button">Set Token</Button>
               </form>
             </div>
