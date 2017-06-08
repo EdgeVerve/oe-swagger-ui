@@ -74,7 +74,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	"showRequestHeaders", "custom", "modelPropertyMacro", "parameterMacro"];
 
 	// eslint-disable-next-line no-undef
-	var _buildInfo = ({"PACKAGE_VERSION":"3.0.13","GIT_COMMIT":"g6604bc1","GIT_DIRTY":false}),GIT_DIRTY = _buildInfo.GIT_DIRTY,GIT_COMMIT = _buildInfo.GIT_COMMIT,PACKAGE_VERSION = _buildInfo.PACKAGE_VERSION;
+	var _buildInfo = ({"PACKAGE_VERSION":"3.0.13","GIT_COMMIT":"gf8a3dcf","GIT_DIRTY":true}),GIT_DIRTY = _buildInfo.GIT_DIRTY,GIT_COMMIT = _buildInfo.GIT_COMMIT,PACKAGE_VERSION = _buildInfo.PACKAGE_VERSION;
 
 	module.exports = function SwaggerUI(opts) {
 
@@ -2378,9 +2378,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	function createStoreWithMiddleware(rootReducer, initialState, getSystem) {
 
 	  var middlwares = [
-	  (0, _reduxLogger.createLogger)({
-	    stateTransformer: function stateTransformer(state) {return state && state.toJS();} }),
-
+	  // createLogger( {
+	  //   stateTransformer: state => state && state.toJS()
+	  // } ),
 	  // errorLog(getSystem), Need to properly handle errors that occur during a render. Ie: let them be...
 	  (0, _utils.systemThunkMiddleware)(getSystem)];
 
