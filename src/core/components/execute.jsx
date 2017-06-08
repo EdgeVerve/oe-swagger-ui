@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from "react"
-
+import { fromJS } from "immutable"
 export default class Execute extends Component {
 
   static propTypes = {
@@ -13,14 +13,22 @@ export default class Execute extends Component {
   }
 
   onClick=()=>{
-    let { specSelectors, specActions, operation, path, method } = this.props
-
+    let { specSelectors, specActions, operation, path, method, authSelectors } = this.props
+    let token = authSelectors.getAccessToken();
     specActions.validateParams( [path, method] )
 
     if ( specSelectors.validateBeforeExecute([path, method]) ) {
       if(this.props.onExecute) {
         this.props.onExecute()
       }
+      operation = operation.setIn(['parameters'], operation.get('parameters').push(fromJS({
+        name: 'access_token',
+        format: 'JSON',
+        value: token,
+        type: 'string',
+        in: 'query'
+      })));
+      
       specActions.execute( { operation, path, method } )
     }
   }
