@@ -45,13 +45,19 @@ export default class Operation extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+
+    // TODO: improve the performance of this code block
+
+    // can we do anything to not dispatch actions
+    // here?
+
     const defaultContentType = "application/json"
     let { specActions, path, method, operation } = nextProps
     let producesValue = operation.get("produces_value")
     let produces = operation.get("produces")
     let consumes = operation.get("consumes")
     let consumesValue = operation.get("consumes_value")
-
+    // console.log([path, method, producesValue, consumesValue]);
     if(nextProps.response !== this.props.response) {
       this.setState({ executeInProgress: false })
     }
@@ -90,10 +96,14 @@ export default class Operation extends React.Component {
   onCancelClick =() => {
     let { specActions, path, method } = this.props
     this.setState({tryItOutEnabled: !this.state.tryItOutEnabled})
+    // console.log('why??');
+    // console.log([path, method]);
     specActions.clearValidateParams([path, method])
   }
 
   onExecute = () => {
+    // let { specActions, authSelectors, path, method } = this.props
+
     this.setState({ executeInProgress: true })
   }
 
@@ -146,7 +156,7 @@ export default class Operation extends React.Component {
     let { tryItOutEnabled } = this.state
     let shown = this.isShown()
     let onChangeKey = [ path, method ] // Used to add values to _this_ operation ( indexed by path and method )
-
+    // console.log(onChangeKey);
     return (
         <div className={deprecated ? "opblock opblock-deprecated" : shown ? `opblock opblock-${method} is-open` : `opblock opblock-${method}`} id={isShownKey} >
           <div className={`opblock-summary opblock-summary-${method}`} onClick={this.toggleShown} >
@@ -221,6 +231,7 @@ export default class Operation extends React.Component {
                     operation={ operation }
                     specActions={ specActions }
                     specSelectors={ specSelectors }
+                    authSelectors= { authSelectors }
                     path={ path }
                     method={ method }
                     onExecute={ this.onExecute } />
