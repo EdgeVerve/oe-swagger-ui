@@ -5,6 +5,7 @@ import { combineReducers } from "redux-immutable"
 import serializeError from "serialize-error"
 import { NEW_THROWN_ERR } from "corePlugins/err/actions"
 import win from "core/window"
+import { createLogger } from "redux-logger";
 
 import { systemThunkMiddleware, isFn, objMap, objReduce, isObject, isArray, isFunc } from "core/utils"
 
@@ -14,9 +15,9 @@ const idFn = a => a
 function createStoreWithMiddleware(rootReducer, initialState, getSystem) {
 
   let middlwares = [
-    // createLogger( {
-    //   stateTransformer: state => state && state.toJS()
-    // } ),
+    createLogger( {
+      stateTransformer: state => state && state.toJS()
+    } ),
     // errorLog(getSystem), Need to properly handle errors that occur during a render. Ie: let them be...
     systemThunkMiddleware( getSystem )
   ]
