@@ -19,6 +19,7 @@ export const ClEAR_VALIDATE_PARAMS = "spec_clear_validate_param"
 export const UPDATE_OPERATION_VALUE = "spec_update_operation_value"
 export const UPDATE_RESOLVED = "spec_update_resolved"
 export const SET_SCHEME = "set_scheme"
+export const UPDATE_TOKEN = "spec_add_param"
 
 export function updateSpec(spec) {
   if(spec instanceof Error) {
@@ -150,6 +151,7 @@ export function clearValidateParams( payload ){
 }
 
 export function changeConsumesValue(path, value) {
+  // console.log('changeConsumesValue:action');
   return {
     type: UPDATE_OPERATION_VALUE,
     payload:{ path, value, key: "consumes_value" }
@@ -191,9 +193,10 @@ export const executeRequest = (req) => ({fn, specActions, specSelectors}) => {
   let { pathName, method, operation } = req
 
   let op = operation.toJS()
-
+  // console.log('spec url:', specSelectors.url());
   // if url is relative, parseUrl makes it absolute by inferring from `window.location`
   req.contextUrl = parseUrl(specSelectors.url()).toString()
+  // console.log('req.contextUrl = ', req.contextUrl);
 
 
   if(op && op.operationId) {
@@ -203,8 +206,9 @@ export const executeRequest = (req) => ({fn, specActions, specSelectors}) => {
   }
 
   let parsedRequest = Object.assign({}, req)
+  // debugger;
   parsedRequest = fn.buildRequest(parsedRequest)
-
+  console.log('parsedRequest:', parsedRequest);
   specActions.setRequest(req.pathName, req.method, parsedRequest)
 
   return fn.execute(req)
@@ -243,5 +247,19 @@ export function setScheme (scheme, path, method) {
   return {
     type: SET_SCHEME,
     payload: { scheme, path, method }
+  }
+}
+
+export function addParam( path, paramName, value, isXml ){
+  return {
+    type: UPDATE_PARAM,
+    payload:{ path, value, paramName, isXml }
+  }
+}
+
+export function updateSpecWithAccessToken(token) {
+  return {
+    type: UPDATE_TOKEN,
+    payload: token
   }
 }

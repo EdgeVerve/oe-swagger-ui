@@ -7,7 +7,7 @@ export default function downloadUrlPlugin (toolbox) {
   let { fn } = toolbox
 
   const actions = {
-    download: (url)=> ({ errActions, specSelectors, specActions }) => {
+    download: (url)=> ({ errActions, specSelectors, specActions, authSelectors, getStore, getState }) => {
       let { fetch } = fn
       url = url || specSelectors.url()
       specActions.updateLoadingStatus("loading")
@@ -25,8 +25,24 @@ export default function downloadUrlPlugin (toolbox) {
           specActions.updateLoadingStatus("failed")
           return errActions.newThrownErr( new Error(res.statusText + " " + url) )
         }
+        let token = authSelectors.getAccessToken();
         specActions.updateLoadingStatus("success")
         specActions.updateSpec(res.text)
+        let store = getStore()
+        let unsub = store.subscribe(function(){
+          let state = getState()
+          // console.log('state:', state.toJS());
+          if ('resolved' in state.toJS().spec) {
+            unsub()
+            // if the above unsub() is immediate, we can
+            // get rid of the setTimeout
+            setTimeout(function(){
+              specActions.updateSpecWithAccessToken(token)
+            })
+
+          }
+        });
+
         specActions.updateUrl(url)
       }
 

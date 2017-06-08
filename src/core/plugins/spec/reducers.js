@@ -15,7 +15,8 @@ import {
   CLEAR_RESPONSE,
   CLEAR_REQUEST,
   ClEAR_VALIDATE_PARAMS,
-  SET_SCHEME
+  SET_SCHEME,
+	UPDATE_TOKEN
 } from "./actions"
 
 export default {
@@ -35,6 +36,8 @@ export default {
   },
 
   [UPDATE_RESOLVED]: (state, action) => {
+		// console.log('UPDATE_RESOLVED:', state);
+		// console.log('token:',state.get('access_token'));
     return state.setIn(["resolved"], fromJSOrdered(action.payload))
   },
 
@@ -42,6 +45,7 @@ export default {
     let { path, paramName, value, isXml } = payload
     return state.updateIn( [ "resolved", "paths", ...path, "parameters" ], fromJS([]), parameters => {
       let index = parameters.findIndex( p => p.get( "name" ) === paramName )
+
       if (!(value instanceof win.File)) {
         value = fromJSOrdered( value )
       }
@@ -63,6 +67,7 @@ export default {
     })
   },
   [ClEAR_VALIDATE_PARAMS]: ( state, { payload:  { pathMethod } } ) => {
+		// console.log(state.toJS());
     return state.updateIn( [ "resolved", "paths", ...pathMethod, "parameters" ], fromJS([]), parameters => {
       return parameters.withMutations( parameters => {
         for ( let i = 0, len = parameters.count(); i < len; i++ ) {
@@ -97,6 +102,7 @@ export default {
   },
 
   [UPDATE_OPERATION_VALUE]: (state, { payload: { path, value, key } }) => {
+		// console.log('changeConsumesValue:reducer');
     let operationPath = ["resolved", "paths", ...path]
     if(!state.getIn(operationPath)) {
       return state
@@ -121,6 +127,36 @@ export default {
       return state.setIn( [ "scheme", "_defaultScheme" ], scheme)
     }
 
-  }
+  },
+
+	[UPDATE_TOKEN]: (state, {payload} ) => {
+		let token = payload;
+		let obj = {
+			name: "access_token",
+			in: "query",
+			type: "string",
+			value: token,
+			format: 'JSON',
+			require: false,
+			description: 'The access token'
+		}
+		if (token) {
+			return state.updateIn(['resolved', 'paths'], fromJS([]), paths => {
+				return paths.map( path => path.map( method => {
+					let parameters = method.get('parameters')
+					let index = parameters.findIndex(p => p.get("name") === 'access_token');
+					if (index > -1) {
+						return method.set('parameters', parameters.setIn([index, "value"], token))
+					}
+					else {
+						return method.set( 'parameters', parameters.push( fromJS(obj) ) )
+					}
+				}))
+			})
+		}
+		// console.l?og(state.toJS());
+		return state;
+
+	}
 
 }

@@ -66,9 +66,12 @@ export default {
   },
 
   [UPDATE_ACCESS_TOKEN]: (state, { payload } ) => {
+
     if (window.localStorage) {
       window.localStorage.setItem("access_token", payload)
     }
-    return state.set("access_token", payload)
+    let s = state.set("access_token", payload);
+    //console.log('Auth:', s);
+    return s;
   }
 }
