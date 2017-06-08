@@ -13,7 +13,7 @@ module.exports = require('./make-webpack-config.js')({
 
   entry: {
     'swagger-ui-bundle': [
-      'babel-polyfill',
+      // 'babel-polyfill',
       './src/core/index.js'
     ]
   },

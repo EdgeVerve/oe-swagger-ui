@@ -4,7 +4,7 @@ var path = require('path')
 module.exports = require('./make-webpack-config.js')({
   _special: {
     separateStylesheets: false,
-    minimize: true,
+    minimize: false,
     sourcemaps: true,
     loaders: {
       "worker.js": ["worker-loader?inline=true&name=[name].js", "babel"]
