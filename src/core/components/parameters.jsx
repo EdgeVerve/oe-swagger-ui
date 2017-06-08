@@ -87,8 +87,11 @@ export default class Parameters extends Component {
               </thead>
               <tbody>
                 {
+                  // this is a small hack for not allowing
+                  // react to render a ui for inputting
+                  // "access_token" - any thoughts?!!
                   eachMap(parameters, (parameter) => (
-                    <ParameterRow fn={ fn }
+                    parameter.get('name') === 'access_token' ? null : <ParameterRow fn={ fn }
                       getComponent={ getComponent }
                       param={ parameter }
                       key={ parameter.get( "name" ) }
