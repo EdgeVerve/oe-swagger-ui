@@ -17313,6 +17313,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    } }, { key: "setAccessToken", value: function setAccessToken(
 
 	    e) {
+	      console.log('set token');
 	      var target = e.target,form = target;
 	      var input = form.getElementsByTagName('input')[0];
 	      var token = input.value;
@@ -17323,10 +17324,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    token) {var _props =
 	      this.props,authActions = _props.authActions,specSelectors = _props.specSelectors,specActions = _props.specActions;
-	      authActions.updateAccessToken(token
-	      // var spec = specSelectors.spec();
-	      // console.log(spec);
-	      );} }, { key: "getAccessToken", value: function getAccessToken()
+	      authActions.updateAccessToken(token);
+	      specActions.updateSpecWithAccessToken(token);
+	    } }, { key: "getAccessToken", value: function getAccessToken()
 
 	    {
 	      if (_window2.default.localStorage) {
@@ -17354,7 +17354,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                _react2.default.createElement("span", null, "oeCloud.io API Explorer")),
 
 	              _react2.default.createElement("form", { className: "set-token-wrapper", onSubmit: this.setAccessToken.bind(this) },
-	                _react2.default.createElement("input", { className: "set-token-input", type: "text", value: accessToken }),
+	                _react2.default.createElement("input", { className: "set-token-input", type: "text", defaultValue: accessToken }),
 	                _react2.default.createElement(Button, { className: "set-token-button" }, "Set Token"))))));
 
 

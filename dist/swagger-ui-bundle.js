@@ -74,7 +74,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	"showRequestHeaders", "custom", "modelPropertyMacro", "parameterMacro"];
 
 	// eslint-disable-next-line no-undef
-	var _buildInfo = ({"PACKAGE_VERSION":"3.0.13","GIT_COMMIT":"g920697f","GIT_DIRTY":true}),GIT_DIRTY = _buildInfo.GIT_DIRTY,GIT_COMMIT = _buildInfo.GIT_COMMIT,PACKAGE_VERSION = _buildInfo.PACKAGE_VERSION;
+	var _buildInfo = ({"PACKAGE_VERSION":"3.0.13","GIT_COMMIT":"g6604bc1","GIT_DIRTY":false}),GIT_DIRTY = _buildInfo.GIT_DIRTY,GIT_COMMIT = _buildInfo.GIT_COMMIT,PACKAGE_VERSION = _buildInfo.PACKAGE_VERSION;
 
 	module.exports = function SwaggerUI(opts) {
 
@@ -2378,9 +2378,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	function createStoreWithMiddleware(rootReducer, initialState, getSystem) {
 
 	  var middlwares = [
-	  // createLogger( {
-	  //   stateTransformer: state => state && state.toJS()
-	  // } ),
+	  (0, _reduxLogger.createLogger)({
+	    stateTransformer: function stateTransformer(state) {return state && state.toJS();} }),
+
 	  // errorLog(getSystem), Need to properly handle errors that occur during a render. Ie: let them be...
 	  (0, _utils.systemThunkMiddleware)(getSystem)];
 
@@ -22166,7 +22166,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  if (token) {
 	    return state.updateIn(['resolved', 'paths'], (0, _immutable.fromJS)([]), function (paths) {
-	      return paths.map(function (path) {return path.map(function (method) {return method.set('parameters', method.get('parameters').push((0, _immutable.fromJS)(obj)));});});
+	      return paths.map(function (path) {return path.map(function (method) {
+	          var parameters = method.get('parameters');
+	          var index = parameters.findIndex(function (p) {return p.get("name") === 'access_token';});
+	          if (index > -1) {
+	            return method.set('parameters', parameters.setIn([index, "value"], token));
+	          } else
+	          {
+	            return method.set('parameters', parameters.push((0, _immutable.fromJS)(obj)));
+	          }
+	        });});
 	    });
 	  }
 	  // console.l?og(state.toJS());
@@ -84875,8 +84884,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var state = getState
 	            // console.log('state:', state.toJS());
 	            ();if ('resolved' in state.toJS().spec) {
-	              unsub();
-	              setTimeout(function () {
+	              unsub
+	              // if the above unsub() is immediate, we can
+	              // get rid of the setTimeout
+	              ();setTimeout(function () {
 	                specActions.updateSpecWithAccessToken(token);
 	              });
 
@@ -86097,7 +86108,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var headersKeys = Object.keys(headers);
 	      var contentType = headers["content-type"];
 
-	      var Curl = getComponent("curl", true);
+	      var Curl = getComponent("curl");
 	      var ResponseBody = getComponent("responseBody");
 	      var returnObject = headersKeys.map(function (key) {
 	        return _react2.default.createElement("span", { className: "headerline", key: key }, " ", key, ": ", headers[key], " ");
@@ -86476,6 +86487,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 
+
+
+
+
+
+
 	    toggleShown = function () {var _this$props =
 	      _this.props,layoutActions = _this$props.layoutActions,isShownKey = _this$props.isShownKey;
 	      layoutActions.show(isShownKey, !_this.isShown());
@@ -86504,11 +86521,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // let { specActions, authSelectors, path, method } = this.props
 
 	      _this.setState({ executeInProgress: true });
-	    };_this.state = { tryItOutEnabled: false };return _this;}_createClass(Operation, [{ key: "componentWillReceiveProps", value: function componentWillReceiveProps(nextProps) {var defaultContentType = "application/json";var specActions = nextProps.specActions,path = nextProps.path,method = nextProps.method,operation = nextProps.operation;var producesValue = operation.get("produces_value");var produces = operation.get("produces");var consumes = operation.get("consumes");var consumesValue = operation.get("consumes_value" // console.log([path, method, producesValue, consumesValue]);
-	      );if (nextProps.response !== this.props.response) {this.setState({ executeInProgress: false });}if (producesValue === undefined) {producesValue = produces && produces.size ? produces.first() : defaultContentType;specActions.changeProducesValue([path, method], producesValue);}if (consumesValue === undefined) {consumesValue = consumes && consumes.size ? consumes.first() : defaultContentType;specActions.changeConsumesValue([path, method], consumesValue);}} }, { key: "shouldComponentUpdate", value: function shouldComponentUpdate(props, state) {return (0, _reactAddonsShallowCompare2.default)(this, props, state);} }, { key: "render", value: function render()
-	    {var _props =
-
-
+	    };_this.state = { tryItOutEnabled: false };return _this;}_createClass(Operation, [{ key: "componentWillReceiveProps", value: function componentWillReceiveProps(nextProps) {// TODO: improve the performance of this code block
+	      // can we do anything to not dispatch actions
+	      // here?
+	      var defaultContentType = "application/json";var specActions = nextProps.specActions,path = nextProps.path,method = nextProps.method,operation = nextProps.operation;var producesValue = operation.get("produces_value");var produces = operation.get("produces");var consumes = operation.get("consumes");var consumesValue = operation.get("consumes_value" // console.log([path, method, producesValue, consumesValue]);
+	      );if (nextProps.response !== this.props.response) {this.setState({ executeInProgress: false });}if (producesValue === undefined) {producesValue = produces && produces.size ? produces.first() : defaultContentType;specActions.changeProducesValue([path, method], producesValue);}if (consumesValue === undefined) {consumesValue = consumes && consumes.size ? consumes.first() : defaultContentType;specActions.changeConsumesValue([path, method], consumesValue);}} }, { key: "shouldComponentUpdate", value: function shouldComponentUpdate(props, state) {return (0, _reactAddonsShallowCompare2.default)(this, props, state);} }, { key: "render", value: function render() {var _props =
 
 
 
@@ -87175,9 +87192,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	              _react2.default.createElement("tbody", null,
 
-
-
-
+	                // this is a small hack for not allowing
+	                // react to render a ui for inputting
+	                // "access_token" - any thoughts?!!
 	                eachMap(parameters, function (parameter) {return (
 	                    parameter.get('name') === 'access_token' ? null : _react2.default.createElement(ParameterRow, { fn: fn,
 	                      getComponent: getComponent,
@@ -91727,9 +91744,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      document.execCommand("copy");
 	    } }, { key: "render", value: function render()
 
-	    {var _props =
-	      this.props,request = _props.request,authSelectors = _props.authSelectors,token = authSelectors.getAccessToken();
-	      var curl = (0, _curlify2.default)(request, token);
+	    {var
+	      request = this.props.request;
+	      var curl = (0, _curlify2.default)(request);
 
 	      return (
 	        _react2.default.createElement("div", null,
