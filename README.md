@@ -1,46 +1,6 @@
-# Swagger UI
+# oeCloud Swagger UI
 
-[![NPM version](https://badge.fury.io/js/swagger-ui.svg)](http://badge.fury.io/js/swagger-ui)
-
-## New!
-
-**This is the new version of swagger-ui, 3.x. Want to learn more? Check out our [FAQ](http://swagger.io/new-ui-faq/).**
-
-As a brand new version, written from the ground up, there are some known issues and unimplemented features. Check out the [Known Issues](#known-issues) section for more details.
-
-For the older version of swagger-ui, refer to the [*2.x branch*](https://github.com/swagger-api/swagger-ui/tree/2.x).
-
-## Compatibility
-The OpenAPI Specification has undergone 4 revisions since initial creation in 2010.  Compatibility between swagger-ui and the OpenAPI Specification is as follows:
-
-Swagger UI Version | Release Date | OpenAPI Spec compatibility | Notes | Status
------------------- | ------------ | -------------------------- | ----- | ------
-3.0.13              | 2017-06-02   | 2.0                        | [tag 
-v3.0.13](https://github.com/swagger-api/swagger-ui/tree/v3.0.13) |
-2.2.10             | 2017-01-04   | 1.1, 1.2, 2.0              | [tag v2.2.10](https://github.com/swagger-api/swagger-ui/tree/v2.2.10) |
-2.1.5              | 2016-07-20   | 1.1, 1.2, 2.0              | [tag v2.1.5](https://github.com/swagger-api/swagger-ui/tree/v2.1.5) |
-2.0.24             | 2014-09-12   | 1.1, 1.2 | [tag v2.0.24](https://github.com/swagger-api/swagger-ui/tree/v2.0.24) |
-1.0.13             | 2013-03-08   | 1.1, 1.2 | [tag v1.0.13](https://github.com/swagger-api/swagger-ui/tree/v1.0.13) |
-1.0.1              | 2011-10-11   | 1.0, 1.1 | [tag v1.0.1](https://github.com/swagger-api/swagger-ui/tree/v1.0.1)   |
-
-
-### How to run
-
-##### Easy start!  Docker
-You can pull a pre-built docker image of the swagger-ui directly from Dockerhub:
-
-```
-docker pull swaggerapi/swagger-ui
-docker run -p 80:8080 swaggerapi/swagger-ui
-```
-
-Will start nginx with swagger-ui on port 80.
-
-##### Prerequisites
-- Node 6.x
-- NPM 3.x
-
-If you just want to see your specs, open `dist/index.html` in your browser directly from your filesystem.
+This is a fork of swagger-ui with custom layouts which are specific to the functioning of oeCloud.io api explorer. Plus some performance improvements.
 
 If you'd like to make modifications to the codebase, run the dev server with: `npm run dev`. A development server will open on `3200`.
 
