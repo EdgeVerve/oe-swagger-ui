@@ -15,8 +15,8 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "npm run build-bundle && npm run build-oecloud",
-    "build-bundle": "webpack --config webpack-dist-bundle.config.js --colors",
-    "build-core": "webpack --config webpack-dist.config.js --colors",
+    "build-bundle": "webpack --config webpack-dist-bundle.config.js",
+    "build-core": "webpack --config webpack-dist.config.js",
     "build-standalone": "webpack --config webpack-dist-standalone.config.js --colors",
     "build-oecloud" : "webpack --config webpack-dist-oecloud.config.js",
     "predev": "npm install",
