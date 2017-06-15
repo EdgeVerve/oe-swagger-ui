@@ -25,14 +25,14 @@ export default function downloadUrlPlugin (toolbox) {
           specActions.updateLoadingStatus("failed")
           return errActions.newThrownErr( new Error(res.statusText + " " + url) )
         }
-        let token = authSelectors.getAccessToken();
+        let token = authSelectors.getAccessToken()
         specActions.updateLoadingStatus("success")
         specActions.updateSpec(res.text)
         let store = getStore()
         let unsub = store.subscribe(function(){
           let state = getState()
           // console.log('state:', state.toJS());
-          if ('resolved' in state.toJS().spec) {
+          if ("resolved" in state.toJS().spec) {
             unsub()
             // if the above unsub() is immediate, we can
             // get rid of the setTimeout
@@ -41,7 +41,7 @@ export default function downloadUrlPlugin (toolbox) {
             })
 
           }
-        });
+        })
 
         specActions.updateUrl(url)
       }

@@ -2,7 +2,7 @@ import React, { PropTypes } from "react"
 import shallowCompare from "react-addons-shallow-compare"
 import { getList } from "core/utils"
 import * as CustomPropTypes from "core/proptypes"
-
+// import { diff } from "deep-diff"
 //import "less/opblock"
 
 export default class Operation extends React.Component {
@@ -40,9 +40,34 @@ export default class Operation extends React.Component {
   constructor(props, context) {
     super(props, context)
     this.state = {
-      tryItOutEnabled: false
+      tryItOutEnabled: false,
+      params: {}
     }
+
+    this.params = {};
+
+    this.shownFlag = this.isShown()
+    this.hasProducesValue = false
+    this.hasConsumesValue = false
+
+    this.updateParams = this._updateParams.bind(this)
+    this.getParams = this._getParams.bind(this)
+
   }
+
+  _updateParams(param, value) {
+    // console.log("_updateParams");
+    this.setState({ params: { [param]: value} })
+    // this.params = Object.assign(this.params, {[param]: value})
+  }
+
+  _getParams() {
+    // console.log("_getParams");
+    // return this.params
+    return this.state.params
+  }
+
+  foo() { return "foo" }
 
   componentWillReceiveProps(nextProps) {
 
@@ -52,25 +77,34 @@ export default class Operation extends React.Component {
     // here?
 
     const defaultContentType = "application/json"
-    let { specActions, path, method, operation } = nextProps
-    let producesValue = operation.get("produces_value")
-    let produces = operation.get("produces")
-    let consumes = operation.get("consumes")
-    let consumesValue = operation.get("consumes_value")
-    // console.log([path, method, producesValue, consumesValue]);
-    if(nextProps.response !== this.props.response) {
-      this.setState({ executeInProgress: false })
+    if (this.isShown()) {
+      let { specActions, path, method, operation } = nextProps
+      let producesValue = operation.get("produces_value")
+      let produces = operation.get("produces")
+      let consumes = operation.get("consumes")
+      let consumesValue = operation.get("consumes_value")
+      // console.log([path, method, producesValue, consumesValue]);
+      if(nextProps.response !== this.props.response) {
+        this.setState({ executeInProgress: false })
+      }
+
+      if (producesValue === undefined) {
+        producesValue = produces && produces.size ? produces.first() : defaultContentType
+        specActions.changeProducesValue([path, method], producesValue)
+        this.hasProducesValue = true
+      }
+
+      if (consumesValue === undefined) {
+        consumesValue = consumes && consumes.size ? consumes.first() : defaultContentType
+        specActions.changeConsumesValue([path, method], consumesValue)
+        this.hasConsumesValue = true
+      }
     }
 
-    if (producesValue === undefined) {
-      producesValue = produces && produces.size ? produces.first() : defaultContentType
-      specActions.changeProducesValue([path, method], producesValue)
-    }
+  }
 
-    if (consumesValue === undefined) {
-      consumesValue = consumes && consumes.size ? consumes.first() : defaultContentType
-      specActions.changeConsumesValue([path, method], consumesValue)
-    }
+  getProducesAndConsumesState() {
+    return this.hasConsumesValue && this.hasProducesValue
   }
 
   shouldComponentUpdate(props, state) {
@@ -126,7 +160,8 @@ export default class Operation extends React.Component {
       authActions,
       authSelectors
     } = this.props
-
+    // console.log('op render:', this.getParams());
+    let gp = this.getParams
     let summary = operation.get("summary")
     let description = operation.get("description")
     let deprecated = operation.get("deprecated")
@@ -213,6 +248,8 @@ export default class Operation extends React.Component {
                 specActions={ specActions }
                 specSelectors={ specSelectors }
                 pathMethod={ [path, method] }
+                updateParam={ this.updateParams }
+                getParam={ this.getParams }
               />
 
               {!tryItOutEnabled || !allowTryItOut ? null : schemes && schemes.size ? <div className="opblock-schemes">
@@ -234,7 +271,8 @@ export default class Operation extends React.Component {
                     authSelectors= { authSelectors }
                     path={ path }
                     method={ method }
-                    onExecute={ this.onExecute } />
+                    onExecute={ this.onExecute }
+                    getParam = { this.getParams } />
               }
 
               { (!tryItOutEnabled || !response || !allowTryItOut) ? null :

@@ -55,7 +55,7 @@ export class JsonSchema_string extends Component {
     let { getComponent, value, schema, required, description } = this.props
     let enumValue = schema["enum"]
     let errors = schema.errors || []
-
+    // console.log('json_schema_string render:', value);
     if ( enumValue ) {
       const Select = getComponent("Select")
       return (<Select allowedValues={ enumValue }

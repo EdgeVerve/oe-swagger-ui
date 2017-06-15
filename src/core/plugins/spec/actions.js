@@ -20,7 +20,7 @@ export const UPDATE_OPERATION_VALUE = "spec_update_operation_value"
 export const UPDATE_RESOLVED = "spec_update_resolved"
 export const SET_SCHEME = "set_scheme"
 export const UPDATE_TOKEN = "spec_add_param"
-
+export const UPDATE_PARAMS_BATCH = "spec_update_params_batch"
 export function updateSpec(spec) {
   if(spec instanceof Error) {
     return {type: UPDATE_SPEC, error: true, payload: spec}
@@ -208,7 +208,7 @@ export const executeRequest = (req) => ({fn, specActions, specSelectors}) => {
   let parsedRequest = Object.assign({}, req)
   // debugger;
   parsedRequest = fn.buildRequest(parsedRequest)
-  console.log('parsedRequest:', parsedRequest);
+  // console.log('parsedRequest:', parsedRequest);
   specActions.setRequest(req.pathName, req.method, parsedRequest)
 
   return fn.execute(req)
@@ -261,5 +261,12 @@ export function updateSpecWithAccessToken(token) {
   return {
     type: UPDATE_TOKEN,
     payload: token
+  }
+}
+
+export function updateParamsBatch(path, method, data) {
+  return {
+    type: UPDATE_PARAMS_BATCH,
+    payload: {path, method, data}
   }
 }

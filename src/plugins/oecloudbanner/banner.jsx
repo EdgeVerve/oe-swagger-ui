@@ -1,5 +1,5 @@
 import React, { PropTypes } from "react"
-import window from 'core/window'
+import window from "core/window"
 
 const lsKey = "swagger_accessToken"
 
@@ -8,54 +8,54 @@ export default class Banner extends React.Component {
   constructor(props, context) {
     super(props, context)
     // let token = this.getAccessToken();
-    this.state = { access_token: null }
-    this.handleChange = this.onChange.bind(this);
-    this.handleSubmit = this.onSubmit.bind(this);
+    this.state = { accessToken: null }
+    this.handleChange = this.onChange.bind(this)
+    this.handleSubmit = this.onSubmit.bind(this)
   }
 
   componentDidMount() {
-    let key = null;
+    let key = null
     if (window.localStorage) {
-      key = window.localStorage.getItem(lsKey);
+      key = window.localStorage.getItem(lsKey)
       if (key) {
         this.updateToken(key)
       }
     }
-    this.setState({ access_token: key });
+    this.setState({ accessToken: key })
   }
 
   onChange(e) {
-    this.setState({ access_token: e.target.value });
+    this.setState({ accessToken: e.target.value })
   }
 
   onSubmit(e) {
-    let token = this.state.access_token;
-    this.updateToken(token.length ? token: null);
-    this.setState({ access_token: token })
-    e.preventDefault();
+    let token = this.state.accessToken
+    this.updateToken(token.length ? token: null)
+    this.setState({ accessToken: token })
+    e.preventDefault()
   }
 
   updateToken(token) {
-    let { authActions, specSelectors, specActions } = this.props
+    let { authActions, specActions } = this.props
     authActions.updateAccessToken(token)
     specActions.updateSpecWithAccessToken(token)
   }
 
   getAccessToken() {
     if (window.localStorage) {
-      let key = window.localStorage.getItem(lsKey);
+      let key = window.localStorage.getItem(lsKey)
       if (key) {
-        return key;
+        return key
       }
     }
-    return null;
+    return null
   }
 
   render() {
-    let { getComponent, authSelectors, authActions } = this.props
+    let { getComponent } = this.props
     const Button = getComponent("Button")
     const Link = getComponent("Link")
-    let accessToken = this.state.access_token ? this.state.access_token : '';
+    let accessToken = this.state.accessToken ? this.state.accessToken : ""
     //
     // accessToken = accessToken ? accessToken : '';
     // console.log('accessToken:', accessToken);
@@ -81,5 +81,6 @@ export default class Banner extends React.Component {
 Banner.propTypes = {
   specSelectors: PropTypes.object.isRequired,
   specActions: PropTypes.object.isRequired,
-  getComponent: PropTypes.func.isRequired
+  getComponent: PropTypes.func.isRequired,
+  authActions: PropTypes.object.isRequired
 }

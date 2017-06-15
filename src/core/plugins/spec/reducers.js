@@ -16,7 +16,8 @@ import {
   CLEAR_REQUEST,
   ClEAR_VALIDATE_PARAMS,
   SET_SCHEME,
-	UPDATE_TOKEN
+	// UPDATE_TOKEN,
+	UPDATE_PARAMS_BATCH
 } from "./actions"
 
 export default {
@@ -129,34 +130,58 @@ export default {
 
   },
 
-	[UPDATE_TOKEN]: (state, {payload} ) => {
-		let token = payload;
-		let obj = {
-			name: "access_token",
-			in: "query",
-			type: "string",
-			value: token,
-			format: 'JSON',
-			require: false,
-			description: 'The access token'
-		}
-		if (token) {
-			return state.updateIn(['resolved', 'paths'], fromJS([]), paths => {
-				return paths.map( path => path.map( method => {
-					let parameters = method.get('parameters')
-					let index = parameters.findIndex(p => p.get("name") === 'access_token');
-					if (index > -1) {
-						return method.set('parameters', parameters.setIn([index, "value"], token))
-					}
-					else {
-						return method.set( 'parameters', parameters.push( fromJS(obj) ) )
-					}
-				}))
-			})
-		}
-		// console.l?og(state.toJS());
-		return state;
+	// [UPDATE_TOKEN]: (state, {payload} ) => {
+	// 	let token = payload;
+	// 	let obj = {
+	// 		name: "access_token",
+	// 		in: "query",
+	// 		type: "string",
+	// 		value: token,
+	// 		format: 'JSON',
+	// 		require: false,
+	// 		description: 'The access token'
+	// 	}
+	// 	if (token) {
+	// 		return state.updateIn(['resolved', 'paths'], fromJS([]), paths => {
+	// 			return paths.map( path => path.map( method => {
+	// 				let parameters = method.get('parameters')
+	// 				let index = parameters.findIndex(p => p.get("name") === 'access_token');
+	// 				if (index > -1) {
+	// 					return method.set('parameters', parameters.setIn([index, "value"], token))
+	// 				}
+	// 				else {
+	// 					return method.set( 'parameters', parameters.push( fromJS(obj) ) )
+	// 				}
+	// 			}))
+	// 		})
+	// 	}
+	// 	// console.l?og(state.toJS());
+	// 	return state;
+	//
+	// },
 
+	[UPDATE_PARAMS_BATCH]: (state, {payload}) => {
+		let { path, method, data } = payload
+
+		let paramKeys = Object.keys(data)
+		let operationPath = [path, method, "parameters"]
+
+		for(let i = 0; i < paramKeys.length; i++) {
+			let key = paramKeys[i]
+			let { value, isXml } = data[key]
+			state = state.updateIn(["resolved", "paths", ...operationPath], fromJS([]), parameters => {
+				var index = parameters.findIndex(p => p.get("name") === key)
+				if (index > -1) {
+					parameters = parameters.setIn([ index, isXml ? "value_xml" : "value" ], value)
+				}
+				else {
+					console.warn("Key does not exist: ", [path, method, key, value])
+				}
+				return parameters
+			})
+		} //end for
+
+		return state
 	}
 
 }

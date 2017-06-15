@@ -9,26 +9,36 @@ export default class Execute extends Component {
     path: PropTypes.string.isRequired,
     getComponent: PropTypes.func.isRequired,
     method: PropTypes.string.isRequired,
-    onExecute: PropTypes.func
+    onExecute: PropTypes.func,
+    authSelectors: PropTypes.object.isRequired,
+    getParam: PropTypes.func
   }
 
   onClick=()=>{
-    let { specSelectors, specActions, operation, path, method, authSelectors } = this.props
-    let token = authSelectors.getAccessToken();
+    let { specSelectors, specActions, operation, path, method, authSelectors, getParam } = this.props
+    let token = authSelectors.getAccessToken()
+    let params = getParam()
+
+    specActions.clearValidateParams([path, method])
+
+    specActions.updateParamsBatch(path, method, params)
+
     specActions.validateParams( [path, method] )
 
     if ( specSelectors.validateBeforeExecute([path, method]) ) {
       if(this.props.onExecute) {
         this.props.onExecute()
       }
-      operation = operation.setIn(['parameters'], operation.get('parameters').push(fromJS({
-        name: 'access_token',
-        format: 'JSON',
-        value: token,
-        type: 'string',
-        in: 'query'
-      })));
-      
+      if (typeof token === 'string' && token.length) {
+        operation = operation.setIn(["parameters"], operation.get("parameters").push(fromJS({
+          name: "access_token",
+          format: "JSON",
+          value: token,
+          type: "string",
+          in: "query"
+        })))
+      }     
+
       specActions.execute( { operation, path, method } )
     }
   }

@@ -70,8 +70,8 @@ export default {
     if (window.localStorage) {
       window.localStorage.setItem("access_token", payload)
     }
-    let s = state.set("access_token", payload);
+    let s = state.set("access_token", payload)
     //console.log('Auth:', s);
-    return s;
+    return s
   }
 }

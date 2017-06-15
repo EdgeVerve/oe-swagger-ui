@@ -11,7 +11,8 @@ export default class ParameterRow extends Component {
     isExecute: PropTypes.bool,
     onChangeConsumes: PropTypes.func.isRequired,
     specSelectors: PropTypes.object.isRequired,
-    pathMethod: PropTypes.array.isRequired
+    pathMethod: PropTypes.array.isRequired,
+    getParam: PropTypes.func.isRequired
   }
 
   constructor(props, context) {
@@ -56,8 +57,8 @@ export default class ParameterRow extends Component {
   }
 
   render() {
-    let {param, onChange, getComponent, isExecute, fn, onChangeConsumes, specSelectors, pathMethod} = this.props
-
+    let {param, onChange, getComponent, isExecute, fn, onChangeConsumes, specSelectors, pathMethod, getParam, key } = this.props
+    // console.log('from para-row render',getParam());
     // const onChangeWrapper = (value) => onChange(param, value)
     const JsonSchemaForm = getComponent("JsonSchemaForm")
     const ParamBody = getComponent("ParamBody")
@@ -85,8 +86,12 @@ export default class ParameterRow extends Component {
     let required = param.get("required")
     let itemType = param.getIn(["items", "type"])
     let parameter = specSelectors.getParameter(pathMethod, param.get("name"))
-    let value = parameter ? parameter.get("value") : ""
-
+    // let value = parameter ? parameter.get("value") : ""
+    let p = getParam()
+    // console.log('getParam():', p);
+    // console.log('param.get("name"):', key)
+    let { value } = p[param.get("name")] ? p[param.get("name")] : { value: undefined }
+    // console.log('value:', value);
     return (
       <tr>
         <td className="col parameters-col_name">
@@ -109,7 +114,8 @@ export default class ParameterRow extends Component {
                               required={ required }
                               description={param.get("description") ? `${param.get("name")} - ${param.get("description")}` : `${param.get("name")}`}
                               onChange={ this.onChangeWrapper }
-                              schema={ param }/>
+                              schema={ param }
+                              key={param.get("name")}/>
           }
 
 

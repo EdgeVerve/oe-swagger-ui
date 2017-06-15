@@ -16,8 +16,8 @@ export default class OeCloudLayout extends React.Component {
     let { getComponent, specSelectors } = this.props
 
     let Container = getComponent("Container")
-    let Row = getComponent("Row")
-    let Col = getComponent("Col")
+    // let Row = getComponent("Row")
+    // let Col = getComponent("Col")
 
     // const Topbar = getComponent("Topbar", true)
     const BaseLayout = getComponent("BaseLayout", true)

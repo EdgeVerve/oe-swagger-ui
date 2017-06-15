@@ -18,7 +18,9 @@ export default class Parameters extends Component {
     onTryoutClick: PropTypes.func,
     onCancelClick: PropTypes.func,
     onChangeKey: PropTypes.array,
-    pathMethod: PropTypes.array.isRequired
+    pathMethod: PropTypes.array.isRequired,
+    updateParam: PropTypes.func,
+    getParam: PropTypes.func
   }
 
 
@@ -31,12 +33,18 @@ export default class Parameters extends Component {
   }
 
   onChange = ( param, value, isXml ) => {
+    // let {
+    //   specActions: { changeParam },
+    //   onChangeKey,
+    // } = this.props
+    //
+    // changeParam( onChangeKey, param.get("name"), value, isXml)
+    // console.log(this)
     let {
-      specActions: { changeParam },
-      onChangeKey,
+      updateParam
     } = this.props
 
-    changeParam( onChangeKey, param.get("name"), value, isXml)
+    updateParam(param.get("name"), { value, isXml })
   }
 
   onChangeConsumesWrapper = ( val ) => {
@@ -60,9 +68,10 @@ export default class Parameters extends Component {
       fn,
       getComponent,
       specSelectors,
-      pathMethod
+      pathMethod,
+      getParam
     } = this.props
-
+    // console.log('parameters render', getParam());
     const ParameterRow = getComponent("parameterRow")
     const TryItOutButton = getComponent("TryItOutButton")
 
@@ -91,7 +100,7 @@ export default class Parameters extends Component {
                   // react to render a ui for inputting
                   // "access_token" - any thoughts?!!
                   eachMap(parameters, (parameter) => (
-                    parameter.get('name') === 'access_token' ? null : <ParameterRow fn={ fn }
+                    parameter.get("name") === "access_token" ? null : <ParameterRow fn={ fn }
                       getComponent={ getComponent }
                       param={ parameter }
                       key={ parameter.get( "name" ) }
@@ -99,7 +108,8 @@ export default class Parameters extends Component {
                       onChangeConsumes={this.onChangeConsumesWrapper}
                       specSelectors={ specSelectors }
                       pathMethod={ pathMethod }
-                      isExecute={ isExecute }/>
+                      isExecute={ isExecute }
+                      getParam={ getParam } />
                   )).toArray()
                 }
               </tbody>
