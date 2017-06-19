@@ -16,7 +16,7 @@ import {
   CLEAR_REQUEST,
   ClEAR_VALIDATE_PARAMS,
   SET_SCHEME,
-	// UPDATE_TOKEN,
+	UPDATE_TOKEN,
 	UPDATE_PARAMS_BATCH
 } from "./actions"
 
@@ -130,38 +130,47 @@ export default {
 
   },
 
-	// [UPDATE_TOKEN]: (state, {payload} ) => {
-	// 	let token = payload;
-	// 	let obj = {
-	// 		name: "access_token",
-	// 		in: "query",
-	// 		type: "string",
-	// 		value: token,
-	// 		format: 'JSON',
-	// 		require: false,
-	// 		description: 'The access token'
-	// 	}
-	// 	if (token) {
-	// 		return state.updateIn(['resolved', 'paths'], fromJS([]), paths => {
-	// 			return paths.map( path => path.map( method => {
-	// 				let parameters = method.get('parameters')
-	// 				let index = parameters.findIndex(p => p.get("name") === 'access_token');
-	// 				if (index > -1) {
-	// 					return method.set('parameters', parameters.setIn([index, "value"], token))
-	// 				}
-	// 				else {
-	// 					return method.set( 'parameters', parameters.push( fromJS(obj) ) )
-	// 				}
-	// 			}))
-	// 		})
-	// 	}
-	// 	// console.l?og(state.toJS());
-	// 	return state;
-	//
-	// },
+	[UPDATE_TOKEN]: (state, {payload} ) => {
+		let token = payload
+		let obj = {
+			name: "access_token",
+			in: "query",
+			type: "string",
+			value: token,
+			format: "JSON",
+			require: false,
+			description: "The access token"
+		}
+		if (token) {
+			return state.updateIn(["resolved", "paths"], fromJS([]), paths => {
+				return paths.map( path => path.map( method => {
+					let parameters = method.get("parameters")
+					let index = parameters.findIndex(p => p.get("name") === "access_token")
+					if (index > -1) {
+						return method.set("parameters", parameters.setIn([index, "value"], token))
+					}
+					else {
+						return method.set( "parameters", parameters.push( fromJS(obj) ) )
+					}
+				}))
+			})
+		}
+		// console.l?og(state.toJS());
+		return state
+
+	},
 
 	[UPDATE_PARAMS_BATCH]: (state, {payload}) => {
+
 		let { path, method, data } = payload
+
+		state = state.updateIn(["resolved", "paths", path, method, "parameters"], fromJS([]), parameters => {
+			return parameters.withMutations( parameters => {
+        for ( let i = 0, len = parameters.count(); i < len; i++ ) {
+          parameters.setIn([i, "errors"], fromJS({}))
+        }
+      })
+		})
 
 		let paramKeys = Object.keys(data)
 		let operationPath = [path, method, "parameters"]
@@ -181,7 +190,17 @@ export default {
 			})
 		} //end for
 
-		return state
+		let operation = state.getIn( ["resolved", "paths", path, method ] )
+		let isXml = /xml/i.test(operation.get("consumes_value"))
+
+		return state.updateIn( [ "resolved", "paths", ...operationPath ], fromJS([]), parameters => {
+      return parameters.withMutations( parameters => {
+        for ( let i = 0, len = parameters.count(); i < len; i++ ) {
+          let errors = validateParam(parameters.get(i), isXml)
+          parameters.setIn([i, "errors"], fromJS(errors))
+        }
+      })
+    })
 	}
 
 }

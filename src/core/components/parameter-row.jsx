@@ -27,29 +27,29 @@ export default class ParameterRow extends Component {
     }
   }
 
-  componentWillReceiveProps(props) {
-    let { specSelectors, pathMethod, param } = props
-    let example = param.get("example")
-    let defaultValue = param.get("default")
-    let parameter = specSelectors.getParameter(pathMethod, param.get("name"))
-    let paramValue = parameter ? parameter.get("value") : undefined
-    let enumValue = parameter ? parameter.get("enum") : undefined
-    let value
-
-    if ( paramValue !== undefined ) {
-      value = paramValue
-    } else if ( example !== undefined ) {
-      value = example
-    } else if ( defaultValue !== undefined) {
-      value = defaultValue
-    } else if ( param.get("required") && enumValue && enumValue.size ) {
-      value = enumValue.first()
-    }
-
-    if ( value !== undefined ) {
-      this.onChangeWrapper(value)
-    }
-  }
+  // componentWillReceiveProps(props) {
+  //   let { specSelectors, pathMethod, param } = props
+  //   let example = param.get("example")
+  //   let defaultValue = param.get("default")
+  //   let parameter = specSelectors.getParameter(pathMethod, param.get("name"))
+  //   let paramValue = parameter ? parameter.get("value") : undefined
+  //   let enumValue = parameter ? parameter.get("enum") : undefined
+  //   let value
+  //
+  //   if ( paramValue !== undefined ) {
+  //     value = paramValue
+  //   } else if ( example !== undefined ) {
+  //     value = example
+  //   } else if ( defaultValue !== undefined) {
+  //     value = defaultValue
+  //   } else if ( param.get("required") && enumValue && enumValue.size ) {
+  //     value = enumValue.first()
+  //   }
+  //
+  //   if ( value !== undefined ) {
+  //     this.onChangeWrapper(value)
+  //   }
+  // }
 
   onChangeWrapper = (value) => {
     let { onChange, param } = this.props
@@ -57,7 +57,7 @@ export default class ParameterRow extends Component {
   }
 
   render() {
-    let {param, onChange, getComponent, isExecute, fn, onChangeConsumes, specSelectors, pathMethod, getParam, key } = this.props
+    let {param, onChange, getComponent, isExecute, fn, onChangeConsumes, specSelectors, pathMethod, getParam } = this.props
     // console.log('from para-row render',getParam());
     // const onChangeWrapper = (value) => onChange(param, value)
     const JsonSchemaForm = getComponent("JsonSchemaForm")
@@ -74,6 +74,7 @@ export default class ParameterRow extends Component {
                    isExecute={ isExecute }
                    specSelectors={ specSelectors }
                    pathMethod={ pathMethod }
+                   getParam={ getParam }
       />
 
     const ModelExample = getComponent("modelExample")
@@ -85,7 +86,7 @@ export default class ParameterRow extends Component {
     let isFormDataSupported = "FormData" in win
     let required = param.get("required")
     let itemType = param.getIn(["items", "type"])
-    let parameter = specSelectors.getParameter(pathMethod, param.get("name"))
+    // let parameter = specSelectors.getParameter(pathMethod, param.get("name"))
     // let value = parameter ? parameter.get("value") : ""
     let p = getParam()
     // console.log('getParam():', p);

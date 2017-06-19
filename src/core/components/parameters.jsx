@@ -109,7 +109,7 @@ export default class Parameters extends Component {
                       specSelectors={ specSelectors }
                       pathMethod={ pathMethod }
                       isExecute={ isExecute }
-                      getParam={ getParam } />
+                      getParam={ getParam }/>
                   )).toArray()
                 }
               </tbody>

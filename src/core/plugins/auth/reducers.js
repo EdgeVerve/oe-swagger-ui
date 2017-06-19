@@ -1,6 +1,6 @@
 import { fromJS, Map } from "immutable"
 import { btoa } from "core/utils"
-import window from "core/window"
+// import window from "core/window"
 import {
   SHOW_AUTH_POPUP,
   AUTHORIZE,
@@ -67,9 +67,9 @@ export default {
 
   [UPDATE_ACCESS_TOKEN]: (state, { payload } ) => {
 
-    if (window.localStorage) {
-      window.localStorage.setItem("access_token", payload)
-    }
+    // if (window.localStorage) {
+    //   window.localStorage.setItem("access_token", payload)
+    // }
     let s = state.set("access_token", payload)
     //console.log('Auth:', s);
     return s

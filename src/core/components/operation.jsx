@@ -44,8 +44,6 @@ export default class Operation extends React.Component {
       params: {}
     }
 
-    this.params = {};
-
     this.shownFlag = this.isShown()
     this.hasProducesValue = false
     this.hasConsumesValue = false
@@ -57,6 +55,9 @@ export default class Operation extends React.Component {
 
   _updateParams(param, value) {
     // console.log("_updateParams");
+    // if (this.state.executeInProgress === true) {
+    //   debugger;
+    // }
     this.setState({ params: { [param]: value} })
     // this.params = Object.assign(this.params, {[param]: value})
   }
@@ -66,8 +67,6 @@ export default class Operation extends React.Component {
     // return this.params
     return this.state.params
   }
-
-  foo() { return "foo" }
 
   componentWillReceiveProps(nextProps) {
 
@@ -161,7 +160,7 @@ export default class Operation extends React.Component {
       authSelectors
     } = this.props
     // console.log('op render:', this.getParams());
-    let gp = this.getParams
+    // let gp = this.getParams
     let summary = operation.get("summary")
     let description = operation.get("description")
     let deprecated = operation.get("deprecated")
@@ -249,8 +248,7 @@ export default class Operation extends React.Component {
                 specSelectors={ specSelectors }
                 pathMethod={ [path, method] }
                 updateParam={ this.updateParams }
-                getParam={ this.getParams }
-              />
+                getParam={ this.getParams }/>
 
               {!tryItOutEnabled || !allowTryItOut ? null : schemes && schemes.size ? <div className="opblock-schemes">
                     <Schemes schemes={ schemes }

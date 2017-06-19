@@ -21,6 +21,7 @@ export const UPDATE_RESOLVED = "spec_update_resolved"
 export const SET_SCHEME = "set_scheme"
 export const UPDATE_TOKEN = "spec_add_param"
 export const UPDATE_PARAMS_BATCH = "spec_update_params_batch"
+
 export function updateSpec(spec) {
   if(spec instanceof Error) {
     return {type: UPDATE_SPEC, error: true, payload: spec}
@@ -193,7 +194,7 @@ export const executeRequest = (req) => ({fn, specActions, specSelectors}) => {
   let { pathName, method, operation } = req
 
   let op = operation.toJS()
-  // console.log('spec url:', specSelectors.url());
+  // console.log(op);
   // if url is relative, parseUrl makes it absolute by inferring from `window.location`
   req.contextUrl = parseUrl(specSelectors.url()).toString()
   // console.log('req.contextUrl = ', req.contextUrl);
@@ -225,7 +226,7 @@ export const execute = ( { path, method, ...extras }={} ) => (system) => {
   let { requestContentType, responseContentType } = specSelectors.contentTypeValues([path, method]).toJS()
   let isXml = /xml/i.test(requestContentType)
   let parameters = specSelectors.parameterValues([path, method], isXml).toJS()
-
+  // console.log('params:', parameters);
   return specActions.executeRequest({fetch, spec, pathName: path, method, parameters, requestContentType, scheme, responseContentType, ...extras })
 }
 

@@ -85,7 +85,19 @@ window.onload = function() {
       SwaggerUIBundle.plugins.DownloadUrl
     ],
     layout: "OeLayout",
-    docExpansion: false
+    docExpansion: false,
+    operationsSorter: function(a, b) {
+      var p1 = a.get("path"), p2 = b.get("path");
+      if (p1 > p2) {
+        return 1
+      }
+      else if (p1 < p2) {
+        return -1
+      }
+      else {
+        return 0;
+      }
+    }
   })
 
   window.ui = ui

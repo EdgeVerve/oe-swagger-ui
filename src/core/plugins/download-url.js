@@ -37,7 +37,9 @@ export default function downloadUrlPlugin (toolbox) {
             // if the above unsub() is immediate, we can
             // get rid of the setTimeout
             setTimeout(function(){
-              specActions.updateSpecWithAccessToken(token)
+              if (token) {
+                specActions.updateSpecWithAccessToken(token)
+              }              
             })
 
           }

@@ -17,7 +17,8 @@ export default class ParamBody extends Component {
     getComponent: PropTypes.func.isRequired,
     isExecute: PropTypes.bool,
     specSelectors: PropTypes.object.isRequired,
-    pathMethod: PropTypes.array.isRequired
+    pathMethod: PropTypes.array.isRequired,
+    getParam: PropTypes.func
   };
 
   static defaultProp = {
@@ -31,7 +32,7 @@ export default class ParamBody extends Component {
     super(props, context)
 
     this.state = {
-      isEditBox: false,
+      isEditBox: true,
       value: ""
     }
 
@@ -45,9 +46,12 @@ export default class ParamBody extends Component {
     return shallowCompare(this, props, state)
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.updateValues.call(this, nextProps)
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   let { isShown } = this.props
+  //   if (isShown()) {
+  //     this.updateValues.call(this, nextProps)
+  //   }
+  // }
 
   updateValues = (props) => {
     let { specSelectors, pathMethod, param, isExecute, consumesValue="" } = props
@@ -75,16 +79,16 @@ export default class ParamBody extends Component {
     return getSampleSchema(schema, xml)
   }
 
-  onChange = (value, { isEditBox, isXml }) => {
-    this.setState({value, isEditBox})
-    this._onChange(value, isXml)
+  onChange = (value, { isXml }, flag = false) => {
+    // this.setState({value, isEditBox})
+    if(flag) this._onChange(value, isXml)
   }
 
   _onChange = (val, isXml) => { (this.props.onChange || NOOP)(this.props.param, val, isXml) }
 
   handleOnChange = e => {
     let {consumesValue} = this.props
-    this.onChange(e.target.value.trim(), {isXml: /xml/i.test(consumesValue)})
+    this.onChange(e.target.value.trim(), {isXml: /xml/i.test(consumesValue)}, true)
   }
 
   toggleIsEditBox = () => this.setState( state => ({isEditBox: !state.isEditBox}))
@@ -96,8 +100,8 @@ export default class ParamBody extends Component {
       isExecute,
       specSelectors,
       pathMethod,
-
-      getComponent,
+      getParam,
+      getComponent
     } = this.props
 
     const Button = getComponent("Button")
@@ -110,13 +114,24 @@ export default class ParamBody extends Component {
     let consumesValue = specSelectors.contentTypeValues(pathMethod).get("requestContentType")
     let consumes = this.props.consumes && this.props.consumes.size ? this.props.consumes : ParamBody.defaultProp.consumes
 
-    let { value, isEditBox } = this.state
+    // let { value, isEditBox } = this.state
+    let p = getParam()
+    let v = p[param.get("name")]
+
+    let { value, isXml } = v ? v : { value: undefined, isXml: /xml/.test(consumesValue) }
+    let { isEditBox } = this.state
+    // console.log({
+    //   isEditBox: isEditBox, isExecute: isExecute, name: pathMethod
+    // });
+    if (!value) {
+      value = isXml ? this.sample("xml") : this.sample()
+    }
 
     return (
       <div className="body-param">
         {
           isEditBox && isExecute
-            ? <TextArea className={ "body-param__text" + ( errors.count() ? " invalid" : "")} value={value} onChange={ this.handleOnChange }/>
+            ? <TextArea className={ "body-param__text" + ( errors.count() ? " invalid" : "")} defaultValue={value} onBlur={ this.handleOnChange }/>
             : (value && <HighlightCode className="body-param__example"
                                value={ value }/>)
         }
@@ -124,7 +139,7 @@ export default class ParamBody extends Component {
           {
             !isExecute ? null
                        : <div className="body-param-edit">
-                        <Button className={isEditBox ? "btn cancel body-param__example-edit" : "btn edit body-param__example-edit"}
+                        <Button className={isExecute ? "btn cancel body-param__example-edit" : "btn edit body-param__example-edit"}
                                  onClick={this.toggleIsEditBox}>{ isEditBox ? "Cancel" : "Edit"}
                          </Button>
                          </div>

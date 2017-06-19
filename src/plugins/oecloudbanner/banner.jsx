@@ -38,6 +38,9 @@ export default class Banner extends React.Component {
   updateToken(token) {
     let { authActions, specActions } = this.props
     authActions.updateAccessToken(token)
+    if (window.localStorage) {
+      window.localStorage.setItem(lsKey, token)
+    }
     specActions.updateSpecWithAccessToken(token)
   }
 
