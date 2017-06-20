@@ -2,7 +2,7 @@
 {
     padding: 8px 30px;
 
-    background-color: #89bf04;
+    background-color: #1724BA !important;
     .topbar-wrapper
     {
         display: flex;
@@ -39,9 +39,10 @@
         {
             margin: 0;
             min-width: 350px;
-            border: 2px solid #547f00;
+            border: 2px solid #fff;
             border-radius: 4px 0 0 4px;
             outline: none;
+            background-color: #e9e9e9;
         }
 
         .set-token-button
@@ -50,8 +51,9 @@
             padding: 4px 40px;
             border: none;
             border-radius: 0 4px 4px 0;
-            background: #547f00;
-            @include text_headline(#fff);
+            color: black;
+            background: #fff;
+
         }
     }
 }

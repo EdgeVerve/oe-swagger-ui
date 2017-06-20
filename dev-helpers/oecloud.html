@@ -86,17 +86,8 @@ window.onload = function() {
     ],
     layout: "OeLayout",
     docExpansion: false,
-    operationsSorter: function(a, b) {
-      var p1 = a.get("path"), p2 = b.get("path");
-      if (p1 > p2) {
-        return 1
-      }
-      else if (p1 < p2) {
-        return -1
-      }
-      else {
-        return 0;
-      }
+    layoutConfigs: {
+      logo: "logo_small.png"
     }
   })
 

@@ -55,7 +55,9 @@ export default class Banner extends React.Component {
   }
 
   render() {
-    let { getComponent } = this.props
+    let { getComponent, getConfigs } = this.props
+    let configs = getConfigs()
+    let imgUrl = configs.layoutConfigs.logo
     const Button = getComponent("Button")
     const Link = getComponent("Link")
     let accessToken = this.state.accessToken ? this.state.accessToken : ""
@@ -67,6 +69,7 @@ export default class Banner extends React.Component {
           <div className="wrapper">
             <div className="topbar-wrapper">
               <Link href="#" title="Swagger UX">
+                <img src={ imgUrl } height="16" width="16"/>
                 <span>oeCloud.io API Explorer</span>
               </Link>
               <form className="set-token-wrapper" onSubmit={ this.handleSubmit }>
