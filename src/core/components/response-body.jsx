@@ -26,16 +26,16 @@ export default class ResponseBody extends React.Component {
         body = "can't parse JSON.  Raw result:\n\n" + content
       }
 
-      bodyEl = <HighlightCode value={ body } />
+      bodyEl = <HighlightCode className="code-container"  value={ body } />
 
       // XML
     } else if (/xml/i.test(contentType)) {
       body = formatXml(content)
-      bodyEl = <HighlightCode value={ body } />
+      bodyEl = <HighlightCode className="code-container"  value={ body } />
 
       // HTML or Plain Text
     } else if (lowerCase(contentType) === "text/html" || /text\/plain/.test(contentType)) {
-      bodyEl = <HighlightCode value={ content } />
+      bodyEl = <HighlightCode className="code-container"  value={ content } />
 
       // Image
     } else if (/^image\//i.test(contentType)) {
@@ -81,7 +81,7 @@ export default class ResponseBody extends React.Component {
 
       // Anything else (CORS)
     } else if (typeof content === "string") {
-      bodyEl = <HighlightCode value={ content } />
+      bodyEl = <HighlightCode className="code-container"  value={ content } />
     } else {
       bodyEl = <div>Unknown response type</div>
     }

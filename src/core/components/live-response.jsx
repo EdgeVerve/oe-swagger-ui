@@ -22,7 +22,8 @@ export default class LiveResponse extends React.Component {
   render() {
     const { request, response, getComponent } = this.props
 
-    const body = response.get("text")
+    let body = response.get("text")
+    // console.log('body:', response.toJS());
     const status = response.get("status")
     const url = response.get("url")
     const headers = response.get("headers").toJS()
@@ -30,7 +31,7 @@ export default class LiveResponse extends React.Component {
     const isError = response.get("error")
 
     const headersKeys = Object.keys(headers)
-    const contentType = headers["content-type"]
+    let contentType = headers["content-type"]
 
     const Curl = getComponent("curl")
     const ResponseBody = getComponent("responseBody")
@@ -38,6 +39,13 @@ export default class LiveResponse extends React.Component {
       return <span className="headerline" key={key}> {key}: {headers[key]} </span>
     })
 
+    if(isError) {
+      // console.log('isError:', response.toJS());
+      let responseJson = response.toJS()
+      body = responseJson.response.text
+      contentType = responseJson.response.headers["content-type"]
+      // console.log('contentType:', contentType);
+    }
     return (
       <div>
         { request && <Curl request={ request }/> }
@@ -67,7 +75,7 @@ export default class LiveResponse extends React.Component {
                   </span>
                 }
                 {
-                  !body || isError ? null
+                  !body ? null
                         : <ResponseBody content={ body }
                                         contentType={ contentType }
                                         url={ url }
