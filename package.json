@@ -18,7 +18,7 @@
     "build-bundle": "webpack --config webpack-dist-bundle.config.js",
     "build-core": "webpack --config webpack-dist.config.js",
     "build-standalone": "webpack --config webpack-dist-standalone.config.js --colors",
-    "build-oecloud": "webpack --config webpack-dist-oecloud.config.js",
+    "build-oecloud": "webpack --config webpack-dist-oecloud.config.js && webpack --config webpack-dist-oecloud-docapp.config.js",
     "predev": "npm install",
     "dev": "npm-run-all --parallel hot-server watch open-localhost",
     "watch": "webpack --config webpack-watch.config.js --watch --progress",
