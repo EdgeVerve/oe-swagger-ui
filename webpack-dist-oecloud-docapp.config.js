@@ -1,10 +1,10 @@
-﻿var path = require('path')
+var path = require("path")
 
 
-module.exports = require('./make-webpack-config.js')({
+module.exports = require("./make-webpack-config.js")({
   _special: {
     separateStylesheets: false,
-    minimize: true,
+    minimize: false,
     sourcemaps: true,
     loaders: {
       "worker.js": ["worker-loader?inline=true&name=[name].js", "babel"]
@@ -12,15 +12,15 @@ module.exports = require('./make-webpack-config.js')({
   },
 
   entry: {
-    'swagger-ui-oecloud-preset': [
-      './src/oecloud/index.js'
+    "swagger-ui-oecloud-docapp-preset" : [
+      "./src/oecloud/docapp/index.js"
     ]
   },
 
   output:  {
     path: path.join(__dirname, "dist"),
     publicPath: "/dist",
-    library: "SwaggerUIOeCloudPreset",
+    library: "SwaggerUIOeCloudDocAppPreset",
     libraryTarget: "umd",
     filename: "[name].js",
     chunkFilename: "js/[name].js",
