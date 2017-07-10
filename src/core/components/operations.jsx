@@ -30,8 +30,15 @@ export default class Operations extends React.Component {
       fn
     } = this.props
 
-    let taggedOps = specSelectors.taggedOperations()
+    // deostroll - ideally this change should be refactored out
+    // and made into a component in the oecloud folder
 
+    let taggedOps = specSelectors.taggedOperations().sort(function(a, b) {
+      let left = a.toJS().tagDetails.name.toLowerCase()
+      let right = b.toJS().tagDetails.name.toLowerCase()
+      return left.localeCompare(right)
+    })
+    
     const Operation = getComponent("operation")
     const Collapse = getComponent("Collapse")
 
