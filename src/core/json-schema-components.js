@@ -66,7 +66,7 @@ export class JsonSchema_string extends Component {
     let [ clearHookData, addHook ] = hooks
     clearHookData()
       return (<Select allowedValues={ enumValue }
-                      value={ value }
+                      defaultValue={ value }
                       allowEmptyValue={ !required }
                       refCb={ e => addHook(schema.name, e) } />)
 
@@ -78,7 +78,7 @@ export class JsonSchema_string extends Component {
       return <Input type="file" className={ errors.length ? "invalid" : ""} refCb= { e => addHook(schema.name, e) } disabled={isDisabled}/>
     }
     else {
-      return <Input type={ schema.format === "password" ? "password" : "text" } className={ errors.length ? "invalid" : ""} value={value} placeholder={description} refCb={ e => addHook(schema.name, e) } disabled={isDisabled}/>
+      return <Input type={ schema.format === "password" ? "password" : "text" } className={ errors.length ? "invalid" : ""} defaultValue={value} placeholder={description} refCb={ e => addHook(schema.name, e) } disabled={isDisabled}/>
     }
   }
 }

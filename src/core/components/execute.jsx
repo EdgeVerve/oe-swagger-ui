@@ -18,8 +18,12 @@ export default class Execute extends Component {
     let { specSelectors, specActions, operation, path, method, getHookData } = this.props
     // let token = authSelectors.getAccessToken()
     
-    let params = getHookData()
-    // specActions.clearValidateParams([path, method])
+    let params = getHookData().reduce((paramObj, item) => {
+      let { value, isXml, name } = item
+      return Object.assign(paramObj, { [name] : { value, isXml } })    
+    }, {})
+    
+    console.log('Params:', params)
     //
     specActions.updateParamsBatch(path, method, params)
 

@@ -94,13 +94,13 @@ export default class ParamBody extends Component {
 
   toggleIsEditBox = () => this.setState( state => ({isEditBox: !state.isEditBox}))
 
-  componentDidMount() {
-    console.log('DidMount', arguments)
-  }
+  // componentDidMount() {
+  //   console.log('DidMount', arguments)
+  // }
 
-  componentDidUpdate() {
-    console.log('DidUpdate', arguments)
-  }
+  // componentDidUpdate() {
+  //   console.log('DidUpdate', arguments)
+  // }
 
   render() {
     let {
@@ -140,7 +140,7 @@ export default class ParamBody extends Component {
       <div className="body-param">
         {
           isEditBox && isExecute
-            ? <TextArea className={ "body-param__text" + ( errors.count() ? " invalid" : "")} defaultValue={value} onChange={ () => this.isDirty = true } onLoad={ (e) => addHook(param.get("name"), e.target, isXml ) }/>
+            ? <TextArea className={ "body-param__text" + ( errors.count() ? " invalid" : "")} defaultValue={value} onChange={ () => this.isDirty = true } refCb={ (e) => addHook(param.get("name"), e, isXml ) }/>
             : (value && <HighlightCode className="body-param__example"
                                value={ value }/>)
         }

@@ -60,19 +60,19 @@ export default class Operation extends React.Component {
 
   addHook = (name, ctrl, isXml) => {
     console.log('AddHook:', { name, ctrl, isXml })
-    this.hooks.push({ name, ctrl, isXml })
+    ctrl && this.hooks.push({ name, ctrl, isXml })
   }
 
   getHookData = () => {
     console.log('getHookData:') 
     return this.hooks.map( hook => {
-      let name = hook.name
+      let { name, ctrl } = hook
       let value = null
       let isXml = hook.isXml
-      if(ctrl.tagName === "SELECT") {
+      if(ctrl && ctrl.tagName === "SELECT") {
         value = ctrl.options[ctrl.selectedIndex].value
       }
-      else if(ctrl.value) {
+      else if(ctrl && ctrl.value) {
         value = ctrl.value
       }
 

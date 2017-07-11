@@ -118,9 +118,9 @@ export class Button extends React.Component {
 }
 
 
-export const TextArea = (props) => <textarea {...props} />
+export const TextArea = (props) => <textarea {...props} ref={ props.refCb }/>
 
-export const Input = (props) => <input {...props} />
+export const Input = (props) => <input {...props} ref={ props.refCb }/>
 
 export class Select extends React.Component {
   static propTypes = {
@@ -173,11 +173,11 @@ export class Select extends React.Component {
   }
 
   render(){
-    let { allowedValues, multiple, allowEmptyValue } = this.props
+    let { allowedValues, multiple, allowEmptyValue, refCb } = this.props
     let value = this.state.value.toJS ? this.state.value.toJS() : this.state.value
 
     return (
-      <select multiple={ multiple } value={ value } onChange={ this.onChange } >
+      <select multiple={ multiple } value={ value } ref={ refCb } >
         { allowEmptyValue ? <option value="">--</option> : null }
         {
           allowedValues.map(function (item, key) {
