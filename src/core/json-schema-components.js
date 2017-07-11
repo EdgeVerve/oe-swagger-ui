@@ -7,7 +7,7 @@ const noop = ()=> {}
 const JsonSchemaPropShape = {
   getComponent: PropTypes.func.isRequired,
   value: PropTypes.any,
-  onChange: PropTypes.func,
+  hooks: PropTypes.array,
   keyName: PropTypes.any,
   fn: PropTypes.object.isRequired,
   schema: PropTypes.object,
@@ -29,7 +29,7 @@ export class JsonSchemaForm extends Component {
   static defaultProps = JsonSchemaDefaultProps
 
   render() {
-    let { schema, value, onChange, getComponent, fn } = this.props
+    let { schema, value, hooks, getComponent, fn } = this.props
 
     if(schema.toJS)
       schema = schema.toJS()
@@ -37,7 +37,13 @@ export class JsonSchemaForm extends Component {
     let { type, format="" } = schema
 
     let Comp = getComponent(`JsonSchema_${type}_${format}`) || getComponent(`JsonSchema_${type}`) || getComponent("JsonSchema_string")
-    return <Comp { ...this.props } fn={fn} getComponent={getComponent} value={value} onChange={onChange} schema={schema}/>
+    return <Comp { ...this.props } 
+      fn={ fn } 
+      getComponent={ getComponent } 
+      value={ value } 
+      schema={ schema } 
+      hooks={ hooks }
+      />
   }
 
 }
@@ -52,25 +58,27 @@ export class JsonSchema_string extends Component {
   }
   onEnumChange = (val) => this.props.onChange(val)
   render() {
-    let { getComponent, value, schema, required, description } = this.props
+    let { getComponent, value, schema, required, description, hooks } = this.props
     let enumValue = schema["enum"]
     let errors = schema.errors || []
     // console.log('json_schema_string render:', value);
     if ( enumValue ) {
       const Select = getComponent("Select")
+    let [ clearHookData, addHook ] = hooks
+    clearHookData()
       return (<Select allowedValues={ enumValue }
                       value={ value }
                       allowEmptyValue={ !required }
-                      onChange={ this.onEnumChange }/>)
+                      onLoad={ (e) => addHook(schema.name, e.target ) }/>)
     }
 
     const isDisabled = schema["in"] === "formData" && !("FormData" in window)
     const Input = getComponent("Input")
     if (schema["type"] === "file") {
-      return <Input type="file" className={ errors.length ? "invalid" : ""} onChange={ this.onChange } disabled={isDisabled}/>
+      return <Input type="file" className={ errors.length ? "invalid" : ""} onLoad={ (e) => addHook(schema.name, e.target ) } disabled={isDisabled}/>
     }
     else {
-      return <Input type={ schema.format === "password" ? "password" : "text" } className={ errors.length ? "invalid" : ""} value={value} placeholder={description} onChange={ this.onChange } disabled={isDisabled}/>
+      return <Input type={ schema.format === "password" ? "password" : "text" } className={ errors.length ? "invalid" : ""} value={value} placeholder={description} onLoad={ (e) => addHook(schema.name, e.target ) } disabled={isDisabled}/>
     }
   }
 }

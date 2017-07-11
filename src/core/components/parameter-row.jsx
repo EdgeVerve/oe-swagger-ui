@@ -4,7 +4,6 @@ import win from "core/window"
 
 export default class ParameterRow extends Component {
   static propTypes = {
-    onChange: PropTypes.func.isRequired,
     param: PropTypes.object.isRequired,
     getComponent: PropTypes.func.isRequired,
     fn: PropTypes.object.isRequired,
@@ -12,7 +11,7 @@ export default class ParameterRow extends Component {
     onChangeConsumes: PropTypes.func.isRequired,
     specSelectors: PropTypes.object.isRequired,
     pathMethod: PropTypes.array.isRequired,
-    getParam: PropTypes.func.isRequired
+    hooks: PropTypes.array.isRequired
   }
 
   constructor(props, context) {
@@ -57,7 +56,7 @@ export default class ParameterRow extends Component {
   }
 
   render() {
-    let {param, onChange, getComponent, isExecute, fn, onChangeConsumes, specSelectors, pathMethod, getParam } = this.props
+    let {param, onChange, getComponent, isExecute, fn, onChangeConsumes, specSelectors, pathMethod, hooks } = this.props
     // console.log('from para-row render',getParam());
     // const onChangeWrapper = (value) => onChange(param, value)
     const JsonSchemaForm = getComponent("JsonSchemaForm")
@@ -74,7 +73,7 @@ export default class ParameterRow extends Component {
                    isExecute={ isExecute }
                    specSelectors={ specSelectors }
                    pathMethod={ pathMethod }
-                   getParam={ getParam }
+                   hooks={ hooks }
       />
 
     const ModelExample = getComponent("modelExample")
@@ -88,10 +87,11 @@ export default class ParameterRow extends Component {
     let itemType = param.getIn(["items", "type"])
     // let parameter = specSelectors.getParameter(pathMethod, param.get("name"))
     // let value = parameter ? parameter.get("value") : ""
-    let p = getParam()
+    // let p = getParam()
     // console.log('getParam():', p);
     // console.log('param.get("name"):', key)
-    let { value } = p[param.get("name")] ? p[param.get("name")] : { value: undefined }
+    // let { value } = p[param.get("name")] ? p[param.get("name")] : { value: undefined }
+    let value = undefined
     // console.log('value:', value);
     return (
       <tr>
@@ -114,9 +114,10 @@ export default class ParameterRow extends Component {
                               value={ value }
                               required={ required }
                               description={param.get("description") ? `${param.get("name")} - ${param.get("description")}` : `${param.get("name")}`}
-                              onChange={ this.onChangeWrapper }
+                              
                               schema={ param }
-                              key={param.get("name")}/>
+                              key={param.get("name")}
+                              hooks={ hooks }/>
           }
 
 

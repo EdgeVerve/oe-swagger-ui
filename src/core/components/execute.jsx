@@ -11,14 +11,14 @@ export default class Execute extends Component {
     method: PropTypes.string.isRequired,
     onExecute: PropTypes.func,
     // authSelectors: PropTypes.object.isRequired,
-    getParam: PropTypes.func
+    getHookData: PropTypes.func
   }
 
   onClick=()=>{
-    let { specSelectors, specActions, operation, path, method, getParam } = this.props
+    let { specSelectors, specActions, operation, path, method, getHookData } = this.props
     // let token = authSelectors.getAccessToken()
-    let params = getParam()
-
+    
+    let params = getHookData()
     // specActions.clearValidateParams([path, method])
     //
     specActions.updateParamsBatch(path, method, params)

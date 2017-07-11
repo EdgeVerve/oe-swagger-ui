@@ -48,24 +48,36 @@ export default class Operation extends React.Component {
     this.hasProducesValue = false
     this.hasConsumesValue = false
 
-    this.updateParams = this._updateParams.bind(this)
-    this.getParams = this._getParams.bind(this)
+    // this.updateParams = this._updateParams.bind(this)
+    // this.getParams = this._getParams.bind(this)
 
   }
 
-  _updateParams(param, value) {
-    // console.log("_updateParams");
-    // if (this.state.executeInProgress === true) {
-    //   debugger;
-    // }
-    this.setState({ params: { [param]: value} })
-    // this.params = Object.assign(this.params, {[param]: value})
+  clearHookData = () => {
+    console.log('ClearHook:')
+    this.hooks = []
   }
 
-  _getParams() {
-    // console.log("_getParams");
-    // return this.params
-    return this.state.params
+  addHook = (name, ctrl, isXml) => {
+    console.log('AddHook:', { name, ctrl, isXml })
+    this.hooks.push({ name, ctrl, isXml })
+  }
+
+  getHookData = () => {
+    console.log('getHookData:') 
+    return this.hooks.map( hook => {
+      let name = hook.name
+      let value = null
+      let isXml = hook.isXml
+      if(ctrl.tagName === "SELECT") {
+        value = ctrl.options[ctrl.selectedIndex].value
+      }
+      else if(ctrl.value) {
+        value = ctrl.value
+      }
+
+      return { name, value, isXml }
+    })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -247,8 +259,7 @@ export default class Operation extends React.Component {
                 specActions={ specActions }
                 specSelectors={ specSelectors }
                 pathMethod={ [path, method] }
-                updateParam={ this.updateParams }
-                getParam={ this.getParams }/>
+                hooks={ [this.clearHookData, this.addHook ] }/>
 
               {!tryItOutEnabled || !allowTryItOut ? null : schemes && schemes.size ? <div className="opblock-schemes">
                     <Schemes schemes={ schemes }
@@ -270,7 +281,7 @@ export default class Operation extends React.Component {
                     path={ path }
                     method={ method }
                     onExecute={ this.onExecute }
-                    getParam = { this.getParams } />
+                    getHookData={ this.getHookData } />
               }
 
               { (!tryItOutEnabled || !response || !allowTryItOut) ? null :
