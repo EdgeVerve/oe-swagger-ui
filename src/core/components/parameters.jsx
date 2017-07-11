@@ -19,10 +19,8 @@ export default class Parameters extends Component {
     onCancelClick: PropTypes.func,
     onChangeKey: PropTypes.array,
     pathMethod: PropTypes.array.isRequired,
-    updateParam: PropTypes.func,
-    getParam: PropTypes.func
+    hooks: PropTypes.array
   }
-
 
   static defaultProps = {
     onTryoutClick: Function.prototype,
@@ -31,6 +29,8 @@ export default class Parameters extends Component {
     allowTryItOut: true,
     onChangeKey: [],
   }
+
+  
 
   onChange = ( param, value, isXml ) => {
     // let {
@@ -69,9 +69,9 @@ export default class Parameters extends Component {
       getComponent,
       specSelectors,
       pathMethod,
-      getParam
+      hooks
     } = this.props
-    // console.log('parameters render', getParam());
+
     const ParameterRow = getComponent("parameterRow")
     const TryItOutButton = getComponent("TryItOutButton")
 
@@ -104,12 +104,10 @@ export default class Parameters extends Component {
                       getComponent={ getComponent }
                       param={ parameter }
                       key={ parameter.get( "name" ) }
-                      onChange={ this.onChange }
-                      onChangeConsumes={this.onChangeConsumesWrapper}
                       specSelectors={ specSelectors }
                       pathMethod={ pathMethod }
                       isExecute={ isExecute }
-                      getParam={ getParam }/>
+                      hooks={ hooks} />
                   )).toArray()
                 }
               </tbody>

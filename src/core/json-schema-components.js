@@ -7,7 +7,7 @@ const noop = ()=> {}
 const JsonSchemaPropShape = {
   getComponent: PropTypes.func.isRequired,
   value: PropTypes.any,
-  onChange: PropTypes.func,
+  hooks: PropTypes.array,
   keyName: PropTypes.any,
   fn: PropTypes.object.isRequired,
   schema: PropTypes.object,
@@ -29,7 +29,7 @@ export class JsonSchemaForm extends Component {
   static defaultProps = JsonSchemaDefaultProps
 
   render() {
-    let { schema, value, onChange, getComponent, fn } = this.props
+    let { schema, value, hooks, getComponent, fn } = this.props
 
     if(schema.toJS)
       schema = schema.toJS()
@@ -37,6 +37,7 @@ export class JsonSchemaForm extends Component {
     let { type, format="" } = schema
 
     let Comp = getComponent(`JsonSchema_${type}_${format}`) || getComponent(`JsonSchema_${type}`) || getComponent("JsonSchema_string")
+
     return <Comp { ...this.props } fn={fn} getComponent={getComponent} value={value}  schema={schema}/>
   }
 
@@ -62,10 +63,13 @@ export class JsonSchema_string extends Component {
     // console.log('json_schema_string render:', value);
     if ( enumValue ) {
       const Select = getComponent("Select")
+    let [ clearHookData, addHook ] = hooks
+    clearHookData()
       return (<Select allowedValues={ enumValue }
                       value={ value }
                       allowEmptyValue={ !required }
                       refCb={ e => addHook(schema.name, e) } />)
+
     }
 
     const isDisabled = schema["in"] === "formData" && !("FormData" in window)

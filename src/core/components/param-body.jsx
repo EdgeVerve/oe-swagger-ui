@@ -9,7 +9,6 @@ export default class ParamBody extends Component {
 
   static propTypes = {
     param: PropTypes.object,
-    onChange: PropTypes.func,
     onChangeConsumes: PropTypes.func,
     consumes: PropTypes.object,
     consumesValue: PropTypes.string,
@@ -18,7 +17,7 @@ export default class ParamBody extends Component {
     isExecute: PropTypes.bool,
     specSelectors: PropTypes.object.isRequired,
     pathMethod: PropTypes.array.isRequired,
-    getParam: PropTypes.func
+    hooks: PropTypes.array.isRequired
   };
 
   static defaultProp = {
@@ -35,6 +34,8 @@ export default class ParamBody extends Component {
       isEditBox: true,
       value: ""
     }
+
+    this.isDirty = false
 
   }
 
@@ -93,6 +94,14 @@ export default class ParamBody extends Component {
 
   toggleIsEditBox = () => this.setState( state => ({isEditBox: !state.isEditBox}))
 
+  componentDidMount() {
+    console.log('DidMount', arguments)
+  }
+
+  componentDidUpdate() {
+    console.log('DidUpdate', arguments)
+  }
+
   render() {
     let {
       onChangeConsumes,
@@ -100,7 +109,7 @@ export default class ParamBody extends Component {
       isExecute,
       specSelectors,
       pathMethod,
-      getParam,
+      hooks,
       getComponent
     } = this.props
 
@@ -114,24 +123,24 @@ export default class ParamBody extends Component {
     let consumesValue = specSelectors.contentTypeValues(pathMethod).get("requestContentType")
     let consumes = this.props.consumes && this.props.consumes.size ? this.props.consumes : ParamBody.defaultProp.consumes
 
-    // let { value, isEditBox } = this.state
-    let p = getParam()
-    let v = p[param.get("name")]
-
-    let { value, isXml } = v ? v : { value: undefined, isXml: /xml/.test(consumesValue) }
+    let value
+    console.log(consumesValue)
+    let isXml = /xml/i.test(consumesValue)
     let { isEditBox } = this.state
-    // console.log({
-    //   isEditBox: isEditBox, isExecute: isExecute, name: pathMethod
-    // });
-    if (!value) {
+
+    let [ clearHookData, addHook ] = hooks
+
+    if (!this.isDirty) {
       value = isXml ? this.sample("xml") : this.sample()
-    }
+    }   
+
+    clearHookData()
 
     return (
       <div className="body-param">
         {
           isEditBox && isExecute
-            ? <TextArea className={ "body-param__text" + ( errors.count() ? " invalid" : "")} defaultValue={value} onBlur={ this.handleOnChange }/>
+            ? <TextArea className={ "body-param__text" + ( errors.count() ? " invalid" : "")} defaultValue={value} onChange={ () => this.isDirty = true } onLoad={ (e) => addHook(param.get("name"), e.target, isXml ) }/>
             : (value && <HighlightCode className="body-param__example"
                                value={ value }/>)
         }
