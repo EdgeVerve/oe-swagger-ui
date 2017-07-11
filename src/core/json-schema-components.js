@@ -37,7 +37,7 @@ export class JsonSchemaForm extends Component {
     let { type, format="" } = schema
 
     let Comp = getComponent(`JsonSchema_${type}_${format}`) || getComponent(`JsonSchema_${type}`) || getComponent("JsonSchema_string")
-    return <Comp { ...this.props } fn={fn} getComponent={getComponent} value={value} onChange={onChange} schema={schema}/>
+    return <Comp { ...this.props } fn={fn} getComponent={getComponent} value={value}  schema={schema}/>
   }
 
 }
@@ -52,29 +52,35 @@ export class JsonSchema_string extends Component {
   }
   onEnumChange = (val) => this.props.onChange(val)
   render() {
-    let { getComponent, value, schema, required, description } = this.props
+    let { getComponent, value, schema, required, description, hooks } = this.props
     let enumValue = schema["enum"]
     let errors = schema.errors || []
+
+    let [clearHookData, addHook ] = hooks
+
+    clearHookData()
     // console.log('json_schema_string render:', value);
     if ( enumValue ) {
       const Select = getComponent("Select")
       return (<Select allowedValues={ enumValue }
                       value={ value }
                       allowEmptyValue={ !required }
-                      onChange={ this.onEnumChange }/>)
+                      refCb={ e => addHook(schema.name, e) } />)
     }
 
     const isDisabled = schema["in"] === "formData" && !("FormData" in window)
     const Input = getComponent("Input")
     if (schema["type"] === "file") {
-      return <Input type="file" className={ errors.length ? "invalid" : ""} onChange={ this.onChange } disabled={isDisabled}/>
+      return <Input type="file" className={ errors.length ? "invalid" : ""} refCb= { e => addHook(schema.name, e) } disabled={isDisabled}/>
     }
     else {
-      return <Input type={ schema.format === "password" ? "password" : "text" } className={ errors.length ? "invalid" : ""} value={value} placeholder={description} onChange={ this.onChange } disabled={isDisabled}/>
+      return <Input type={ schema.format === "password" ? "password" : "text" } className={ errors.length ? "invalid" : ""} value={value} placeholder={description} refCb={ e => addHook(schema.name, e) } disabled={isDisabled}/>
     }
   }
 }
 
+
+//TODO: handle refs for this case
 export class JsonSchema_array extends Component {
 
   static propTypes = JsonSchemaPropShape
@@ -124,7 +130,7 @@ export class JsonSchema_array extends Component {
   }
 
   render() {
-    let { getComponent, required, schema, fn } = this.props
+    let { getComponent, required, schema, fn, hooks } = this.props
 
     let itemSchema = fn.inferSchema(schema.items)
 
@@ -134,13 +140,15 @@ export class JsonSchema_array extends Component {
     let enumValue = itemSchema["enum"]
     let value = this.state.value
 
+    let [clearHookData, addHook] = hooks 
+
     if ( enumValue ) {
       const Select = getComponent("Select")
       return (<Select multiple={ true }
                      value={ value }
                      allowedValues={ enumValue }
                      allowEmptyValue={ !required }
-                     onChange={ this.onEnumChange }/>)
+                     refCb={ e => addHook(schema.name, e) }/>)
     }
 
     let errors = schema.errors || []
