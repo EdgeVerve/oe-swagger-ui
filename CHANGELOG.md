@@ -1,3 +1,7 @@
+## 20170714, v0.2.2
+- fixes the _isDefaultDelete field from setting itself to a `true` value in the ui
+- fixes - when execute button click on a remote method with no parameters, it fails
+
 ## 20170712, v0.2.1
 - sorted the order which models appear
 - fixed issue where input controls were getting cleared post execute
