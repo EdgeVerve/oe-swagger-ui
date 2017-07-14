@@ -4,6 +4,7 @@ import { getList } from "core/utils"
 import * as CustomPropTypes from "core/proptypes"
 // import { diff } from "deep-diff"
 //import "less/opblock"
+// let NOOP = function() {}
 
 export default class Operation extends React.Component {
   static propTypes = {
@@ -50,21 +51,24 @@ export default class Operation extends React.Component {
 
     // this.updateParams = this._updateParams.bind(this)
     // this.getParams = this._getParams.bind(this)
-
+    this.hooks = []
   }
 
   clearHookData = () => {
-    console.log('ClearHook:')
+    //console.log('ClearHook:')
     this.hooks = []
   }
 
   addHook = (name, ctrl, isXml) => {
-    console.log('AddHook:', { name, ctrl, isXml })
-    ctrl && this.hooks.push({ name, ctrl, isXml })
+    //console.log('AddHook:', { name, ctrl, isXml })
+    // ctrl ? this.hooks.push({ name, ctrl, isXml }) : NOOP()
+    if (ctrl) {
+      this.hooks.push({ name, ctrl, isXml })
+    }
   }
 
   getHookData = () => {
-    console.log('getHookData:') 
+    //console.log('getHookData:') 
     return this.hooks.map( hook => {
       let { name, ctrl } = hook
       let value = null

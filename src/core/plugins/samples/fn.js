@@ -26,7 +26,9 @@ const primitive = (schema) => {
 
 
 export const sampleFromSchema = (schema, config={}) => {
-  let { type, example, properties, additionalProperties, items } = objectify(schema)
+  let objectifySchema = objectify(schema)
+  let { type, example, properties, additionalProperties, items } = objectifySchema
+  let defaultValue = objectifySchema.default
   let { includeReadOnly } = config
 
   if(example !== undefined)
@@ -74,7 +76,17 @@ export const sampleFromSchema = (schema, config={}) => {
     return normalizeArray(schema["enum"])[0]
   }
 
-  return primitive(schema)
+  if (example !== undefined) {
+    return example
+  }
+  else if(defaultValue !== undefined) {
+    return defaultValue
+  }
+  else {
+    return primitive(schema)  
+  }
+
+  
 }
 
 export const inferSchema = (thing) => {

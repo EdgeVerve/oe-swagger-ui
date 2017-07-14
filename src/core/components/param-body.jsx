@@ -124,7 +124,7 @@ export default class ParamBody extends Component {
     let consumes = this.props.consumes && this.props.consumes.size ? this.props.consumes : ParamBody.defaultProp.consumes
 
     let value
-    console.log(consumesValue)
+    // console.log(consumesValue)
     let isXml = /xml/i.test(consumesValue)
     let { isEditBox } = this.state
 
