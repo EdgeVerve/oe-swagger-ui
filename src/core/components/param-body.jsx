@@ -130,9 +130,11 @@ export default class ParamBody extends Component {
 
     let [ clearHookData, addHook ] = hooks
 
-    if (!this.isDirty) {
-      value = isXml ? this.sample("xml") : this.sample()
-    }   
+    // if (!this.isDirty) {
+    //   value = isXml ? this.sample("xml") : this.sample()
+    // }
+
+    value = isXml ? this.sample("xml") : this.sample()   
 
     clearHookData()
 

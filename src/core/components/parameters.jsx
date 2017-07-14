@@ -32,20 +32,20 @@ export default class Parameters extends Component {
 
   
 
-  onChange = ( param, value, isXml ) => {
-    // let {
-    //   specActions: { changeParam },
-    //   onChangeKey,
-    // } = this.props
-    //
-    // changeParam( onChangeKey, param.get("name"), value, isXml)
-    // console.log(this)
-    let {
-      updateParam
-    } = this.props
+  // onChange = ( param, value, isXml ) => {
+  //   // let {
+  //   //   specActions: { changeParam },
+  //   //   onChangeKey,
+  //   // } = this.props
+  //   //
+  //   // changeParam( onChangeKey, param.get("name"), value, isXml)
+  //   // console.log(this)
+  //   // let {
+  //   //   updateParam
+  //   // } = this.props
 
-    updateParam(param.get("name"), { value, isXml })
-  }
+  //   // updateParam(param.get("name"), { value, isXml })
+  // }
 
   onChangeConsumesWrapper = ( val ) => {
     let {
@@ -104,6 +104,7 @@ export default class Parameters extends Component {
                       getComponent={ getComponent }
                       param={ parameter }
                       key={ parameter.get( "name" ) }
+                      onChangeConsumes={ this.onChangeConsumesWrapper }
                       specSelectors={ specSelectors }
                       pathMethod={ pathMethod }
                       isExecute={ isExecute }

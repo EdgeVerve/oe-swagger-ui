@@ -50,13 +50,13 @@ export default class ParameterRow extends Component {
   //   }
   // }
 
-  onChangeWrapper = (value) => {
-    let { onChange, param } = this.props
-    return onChange(param, value)
-  }
+  // onChangeWrapper = (value) => {
+  //   let { onChange, param } = this.props
+  //   return onChange(param, value)
+  // }
 
   render() {
-    let {param, onChange, getComponent, isExecute, fn, onChangeConsumes, specSelectors, pathMethod, hooks } = this.props
+    let {param, getComponent, isExecute, fn, onChangeConsumes, specSelectors, pathMethod, hooks } = this.props
     // console.log('from para-row render',getParam());
     // const onChangeWrapper = (value) => onChange(param, value)
     const JsonSchemaForm = getComponent("JsonSchemaForm")
@@ -68,7 +68,7 @@ export default class ParameterRow extends Component {
                    param={param}
                    consumes={ specSelectors.operationConsumes(pathMethod) }
                    consumesValue={ specSelectors.contentTypeValues(pathMethod).get("requestContentType") }
-                   onChange={onChange}
+                   // onChange={onChange}
                    onChangeConsumes={onChangeConsumes}
                    isExecute={ isExecute }
                    specSelectors={ specSelectors }
