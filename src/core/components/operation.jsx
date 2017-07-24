@@ -207,6 +207,9 @@ export default class Operation extends React.Component {
     let shown = this.isShown()
     let onChangeKey = [ path, method ] // Used to add values to _this_ operation ( indexed by path and method )
     // console.log(onChangeKey);
+
+    this.previousState = { shown, path }
+    
     return (
         <div className={deprecated ? "opblock opblock-deprecated" : shown ? `opblock opblock-${method} is-open` : `opblock opblock-${method}`} id={isShownKey} >
           <div className={`opblock-summary opblock-summary-${method}`} onClick={this.toggleShown} >

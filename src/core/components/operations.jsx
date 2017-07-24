@@ -17,7 +17,31 @@ export default class Operations extends React.Component {
 
   };
 
+  shouldComponentUpdate(nextProps) {
+    
+    // console.assert(getState, 'getstate not available')
+    if (this.previousState) {
+      let previous = this.previousState["operations-tag"]
+      let { getState } = nextProps
+      let layout = getState().get("layout").toJS()
+      
+      if (layout.shown) {
+        let tags = layout.shown["operations-tag"]
+        if (tags) {
+          let res = Object.keys(tags).some( key => tags[key] !== previous[key])
+          console.log('Operations Render required:', res)  
+          return res
+        }
+        
+      }
+
+    }
+
+    return true
+  }
+
   render() {
+    console.log('Render Operations')
     let {
       specSelectors,
       specActions,
@@ -44,7 +68,7 @@ export default class Operations extends React.Component {
 
     let showSummary = layoutSelectors.showSummary()
     let { docExpansion } = getConfigs()
-
+    this.previousState = { "operations-tag" : {} }
     return (
         <div>
           {
@@ -53,11 +77,10 @@ export default class Operations extends React.Component {
               let tagDescription = tagObj.getIn(["tagDetails", "description"], null)
 
               let isShownKey = ["operations-tag", tag]
-// <<<<<<< HEAD
-//               let showTag = layoutSelectors.isShown(isShownKey, false)
-// =======
+              // console.log(isShownKey)
               let showTag = layoutSelectors.isShown(isShownKey, docExpansion === "full" || docExpansion === "list")
-// >>>>>>> 12dd90f748b3f22cfdd973f437b51812244b4971
+              // this.previousState[isShownKey.join(".")] = showTag
+              this.previousState["operations-tag"][tag] = showTag
 
               return (
                 <div className={showTag ? "opblock-tag-section is-open" : "opblock-tag-section"} key={"operation-" + tag}>
