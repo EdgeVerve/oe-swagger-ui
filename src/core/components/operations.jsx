@@ -17,28 +17,28 @@ export default class Operations extends React.Component {
 
   };
 
-  shouldComponentUpdate(nextProps) {
+  // shouldComponentUpdate(nextProps) {
     
-    // console.assert(getState, 'getstate not available')
-    if (this.previousState) {
-      let previous = this.previousState["operations-tag"]
-      let { getState } = nextProps
-      let layout = getState().get("layout").toJS()
+  //   // console.assert(getState, 'getstate not available')
+  //   if (this.previousState) {
+  //     let previous = this.previousState["operations-tag"]
+  //     let { getState } = nextProps
+  //     let layout = getState().get("layout").toJS()
       
-      if (layout.shown) {
-        let tags = layout.shown["operations-tag"]
-        if (tags) {
-          let res = Object.keys(tags).some( key => tags[key] !== previous[key])
-          console.log('Operations Render required:', res)  
-          return res
-        }
+  //     if (layout.shown) {
+  //       let tags = layout.shown["operations-tag"]
+  //       if (tags) {
+  //         let res = Object.keys(tags).some( key => tags[key] !== previous[key])
+  //         console.log('Operations Render required:', res)  
+  //         return res
+  //       }
         
-      }
+  //     }
 
-    }
+  //   }
 
-    return true
-  }
+  //   return true
+  // }
 
   render() {
     console.log('Render Operations')

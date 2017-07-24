@@ -85,7 +85,7 @@ export const getConfigs = createSelector(
     auth => auth.get( "configs" )
 )
 
-export const getAccessToken = createSelector(
-  state,
-  auth => auth.get("access_token")
-)
+// export const getAccessToken = createSelector(
+//   state,
+//   auth => auth.get("access_token")
+// )

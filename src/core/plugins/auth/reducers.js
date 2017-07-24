@@ -7,7 +7,7 @@ import {
   AUTHORIZE_OAUTH2,
   LOGOUT,
   CONFIGURE_AUTH,
-  UPDATE_ACCESS_TOKEN
+  // UPDATE_ACCESS_TOKEN
 } from "./actions"
 
 export default {
@@ -65,13 +65,13 @@ export default {
     return state.set("configs", payload)
   },
 
-  [UPDATE_ACCESS_TOKEN]: (state, { payload } ) => {
+  // [UPDATE_ACCESS_TOKEN]: (state, { payload } ) => {
 
-    // if (window.localStorage) {
-    //   window.localStorage.setItem("access_token", payload)
-    // }
-    let s = state.set("access_token", payload)
-    //console.log('Auth:', s);
-    return s
-  }
+  //   // if (window.localStorage) {
+  //   //   window.localStorage.setItem("access_token", payload)
+  //   // }
+  //   let s = state.set("access_token", payload)
+  //   //console.log('Auth:', s);
+  //   return s
+  // }
 }

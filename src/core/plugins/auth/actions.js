@@ -8,7 +8,7 @@ export const PRE_AUTHORIZE_OAUTH2 = "pre_authorize_oauth2"
 export const AUTHORIZE_OAUTH2 = "authorize_oauth2"
 export const VALIDATE = "validate"
 export const CONFIGURE_AUTH = "configure_auth"
-export const UPDATE_ACCESS_TOKEN = "update_access_token"
+// export const UPDATE_ACCESS_TOKEN = "update_access_token"
 
 const scopeSeparator = " "
 
@@ -192,9 +192,9 @@ export function configureAuth(payload) {
   }
 }
 
-export function updateAccessToken(token) {
-  return {
-    type: UPDATE_ACCESS_TOKEN,
-    payload: token
-  }
-}
+// export function updateAccessToken(token) {
+//   return {
+//     type: UPDATE_ACCESS_TOKEN,
+//     payload: token
+//   }
+// }

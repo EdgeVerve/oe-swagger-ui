@@ -20,7 +20,7 @@ module.exports = require("./make-webpack-config")({
     ],
     'swagger-ui-oecloud-preset' : [
       // 'webpack/hot/dev-server',
-      './src/oecloud/index.js'
+      './src/oecloud/main/index.js'
     ],
     'swagger-ui-oecloud-docapp-preset' : [
       './src/oecloud/docapp/index.js'
