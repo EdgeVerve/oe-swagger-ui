@@ -81,7 +81,8 @@ export default class Store {
         this.getBoundSelectors(getState, this.getSystem),
         this.getStateThunks(getState),
         this.getFn(),
-        this.getConfigs()
+        this.getConfigs(),
+        { self : this._getSelf(this)}
      )
 
     if(buildReducer)
@@ -261,6 +262,10 @@ export default class Store {
     return (dispatch) => {
       return deepExtend({}, this.getWrappedAndBoundActions(dispatch), this.getFn(), extras)
     }
+  }
+
+  _getSelf() {
+    return this
   }
 
 }

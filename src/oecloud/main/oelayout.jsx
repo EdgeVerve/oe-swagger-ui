@@ -20,7 +20,7 @@ export default class OeCloudLayout extends React.Component {
     // let Col = getComponent("Col")
 
     // const Topbar = getComponent("Topbar", true)
-    const BaseLayout = getComponent("BaseLayout", true)
+    const BaseLayout = getComponent("OeBaseLayout", true)
     // const OnlineValidatorBadge = getComponent("onlineValidatorBadge", true)
     const Banner = getComponent("Banner", true)
 
