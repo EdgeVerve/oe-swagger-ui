@@ -95,6 +95,7 @@ export default class ParameterRow extends Component {
     // console.log('value:', value);
     return (
       <tr>
+
         <td className="col parameters-col_name">
           <div className={required ? "parameter__name required" : "parameter__name"}>
             { param.get("name") }
@@ -114,7 +115,7 @@ export default class ParameterRow extends Component {
                               value={ value }
                               required={ required }
                               description={param.get("description") ? `${param.get("name")} - ${param.get("description")}` : `${param.get("name")}`}
-                              
+
                               schema={ param }
                               key={param.get("name")}
                               hooks={ hooks }/>

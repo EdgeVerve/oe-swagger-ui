@@ -13,8 +13,9 @@ export default class OeBaseLayout extends React.Component {
   }
 
   render() {
-    let { specSelectors, specActions, getComponent } = this.props
-
+    console.log("OeBaseLayout")
+    let { specSelectors, specActions, getToolBoxedComponent, getComponent } = this.props
+    console.log("OeBaseLayout Render")
     let info = specSelectors.info()
     let url = specSelectors.url()
     let basePath = specSelectors.basePath()
@@ -24,7 +25,7 @@ export default class OeBaseLayout extends React.Component {
     let schemes = specSelectors.schemes()
 
     let Info = getComponent("info")
-    let Operations = getComponent("OeOperations", true)
+    let Operations = getToolBoxedComponent("OeOperations")
     // console.log('Ops Component:', Operations)
     let Models = getComponent("models", true)
     let AuthorizeBtn = getComponent("authorizeBtn", true)

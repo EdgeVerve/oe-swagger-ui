@@ -16,13 +16,13 @@ const state = state => state
 // }
 
 const getTaggedOpsSorted = createSelector(state, state => ({specSelectors}) => {
-  console.time("taggedOps")
+  // console.time("taggedOps")
   let res = specSelectors.taggedOperations().sort( (a,b) => {
     let left = a.toJS().tagDetails.name.toLowerCase()
     let right = b.toJS().tagDetails.name.toLowerCase()
     return left.localeCompare(right)
   })
-  console.timeEnd("taggedOps")
+  // console.timeEnd("taggedOps")
   return res
 })
 
