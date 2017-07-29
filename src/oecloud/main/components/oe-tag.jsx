@@ -8,14 +8,14 @@ export default class OeTag extends React.Component {
     this.state = { showTag : false }
   }
 
-  setVisibility = (flag) => {
-    this.setState( { showTag : flag } )
+  toggleShown = () => {
+    this.setState({
+      showTag: !this.state.showTag
+    })
   }
 
-  invertVisibility = (current) => this.setVisibility(!current)
-
   render() {
-    console.log("OeTag")
+    console.log("RENDER: OeTag")
     let { operations, tagName, tagDesc , toolbox } = this.props
     // let getComponent = toolbox.getComponent
     let { getComponent, getToolBoxedComponent } = toolbox
@@ -28,10 +28,10 @@ export default class OeTag extends React.Component {
     // console.log("sorter:", operationsSorter)
     return (
         <div className={ "opblock-tag-section" + ( showTag ? " is-open" : "" )}>
-          <h4 className="opblock-tag" onClick={ () => this.invertVisibility(showTag) }>
+          <h4 className="opblock-tag" onClick={ this.toggleShown }>
             <span>{tagName}</span>
             <small>{tagDesc}</small>
-            <button className="expand-operation" title="Expand operation" onClick={ () => this.invertVisibility(showTag) }>
+            <button className="expand-operation" title="Expand operation" onClick={ this.toggleShown }>
               <svg className="arrow" width="20" height="20">
                 <use xlinkHref={showTag ? "#large-arrow-down" : "#large-arrow"} />
               </svg>
@@ -44,7 +44,7 @@ export default class OeTag extends React.Component {
                 operations.sort(operationsSorter).map( op => {
                   let method =  op.get("method")
                   let path = op.get("path")
-                  let key = ["operations", path, method]
+                  let key = ["operations", path, method].join('-')
                   return <TaggedOp
                       key={ key }
                       method={method}

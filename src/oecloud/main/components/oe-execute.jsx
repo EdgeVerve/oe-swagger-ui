@@ -1,19 +1,17 @@
 import React, { Component, PropTypes } from "react"
 // import { fromJS } from "immutable"
 export default class OeExecute extends Component {
-
+  // constructor(props, ctx) {
+  //   super(pros, ctx)
+  // }
   onExecute = () => {
-    let {opToolbox, operation, fn } = this.props
-    console.log('HookData:', opToolbox.getHookData())
-    opToolbox.setExecuteProgress(true)
 
-    setTimeout(function(){
-      opToolbox.setExecuteProgress(false)
-    }, 5000)
+    this.props.opToolbox.runExecute()
+
   }
 
   render() {
-    console.log("OeExecute")
+    console.log("RENDER: OeExecute")
     return (
       <button className="btn execute opblock-control__btn" type="button" onClick={ this.onExecute }>
         Execute

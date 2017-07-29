@@ -13,7 +13,7 @@ export default class OeCloudLayout extends React.Component {
   }
 
   render() {
-    console.log("OeCloudLayout")
+    console.log("RENDER: OeCloudLayout")
     let { getComponent, specSelectors } = this.props
 
     let Container = getComponent("Container")

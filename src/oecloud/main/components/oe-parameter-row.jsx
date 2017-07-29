@@ -4,6 +4,8 @@ import win from "core/window"
 
 export default class OeParameterRow extends Component {
 
+  constructor(...args) { super(...args) }
+
   refCallback = (ctrl) => {
     let { opToolbox: { addHook }, param } = this.props
 
@@ -60,7 +62,7 @@ export default class OeParameterRow extends Component {
 
 
   render() {
-    console.log("OeParameterRow")
+    console.log("RENDER: OeParameterRow")
     let { param, opToolbox, getComponent, consumes, fn } = this.props
 
     let inType = param.get("in")
@@ -72,7 +74,6 @@ export default class OeParameterRow extends Component {
 
     return (
       <tr>
-        { /* parameter name */ }
         <td className="col parameters-col_name">
           <div className={required ? "parameter__name required" : "parameter__name"}>
             { param.get("name") }
@@ -81,7 +82,7 @@ export default class OeParameterRow extends Component {
           <div className="parаmeter__type">{ param.get("type") } { itemType && `[${itemType}]` }</div>
           <div className="parameter__in">({ param.get("in") })</div>
         </td>
-        {/* parameter input */}
+
         <td className="col parameters-col_description">
           <Markdown source={ param.get("description") } />
           {(isFormData && !isFormDataSupported) && <div>Error: your browser does not support FormData</div>}
@@ -91,7 +92,7 @@ export default class OeParameterRow extends Component {
           }
 
           {
-            inType !== "body" && this.renderRequiredInput(param)
+            inType !== "body" ? this.renderRequiredInput(param) : null
           }
         </td>
       </tr>

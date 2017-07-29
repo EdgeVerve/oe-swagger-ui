@@ -13,7 +13,7 @@ export default class OeBaseLayout extends React.Component {
   }
 
   render() {
-    console.log("OeBaseLayout")
+    console.log("RENDER: OeBaseLayout")
     let { specSelectors, specActions, getToolBoxedComponent, getComponent } = this.props
     console.log("OeBaseLayout Render")
     let info = specSelectors.info()

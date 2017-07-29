@@ -15,10 +15,10 @@ const idFn = a => a
 function createStoreWithMiddleware(rootReducer, initialState, getSystem) {
 
   let middlwares = [
-    // createLogger( {
-    //   stateTransformer: state => state && state.toJS(),
-    //   diff: true
-    // } ),
+    createLogger( {
+      stateTransformer: state => state && state.toJS(),
+      diff: true
+    } ),
     // errorLog(getSystem), Need to properly handle errors that occur during a render. Ie: let them be...
     systemThunkMiddleware( getSystem )
   ]

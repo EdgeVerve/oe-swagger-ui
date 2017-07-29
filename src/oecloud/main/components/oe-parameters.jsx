@@ -7,8 +7,8 @@ const eachMap = (iterable, fn) => iterable.valueSeq().filter(Im.Map.isMap).map(f
 
 export default class OeParameters extends Component {
 
-  constructor(props, context) {
-    super(props, context)
+  constructor(...args) {
+    super(...args)
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -35,9 +35,10 @@ export default class OeParameters extends Component {
             <tbody>
               {
                 eachMap(parameters, (parameter) => {
+                  let name = `${path}-${method}-${parameter.get("name")}`
                   return parameter.get("name") === "access_token" ? null : (<ParameterRow
                                                                                 param={ parameter }
-                                                                                key={ parameter.get("name") }
+                                                                                key={ name }
                                                                                 path={ path }
                                                                                 method={ method }
                                                                                 opToolbox={ opToolbox }
@@ -55,7 +56,7 @@ export default class OeParameters extends Component {
   }
 
   render() {
-    console.log("OeParameters")
+    console.log("RENDER: OeParameters")
     let { parameters, path, method, opToolbox, consumes, toolbox: {getComponent}, toolbox } = this.props
 
     return (

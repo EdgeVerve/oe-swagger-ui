@@ -2,6 +2,7 @@ import React, { PropTypes } from "react"
 import { getList } from "core/utils"
 
 export default class OeOperation extends React.Component {
+
 	constructor(props, context) {
     super(props, context)
     this.state = {
@@ -44,22 +45,28 @@ export default class OeOperation extends React.Component {
 
   updateResponse = (response) => this.setCache({ response : response })
 
-  setExecuteProgress = (status) => this.setState( { executeInProgress: status })
-
-  invertShown = (flag) => {
-    this.setState({ shown: !flag})
+  toggleShown = () => {
+    this.setState({ shown: !this.state.shown })
   }
 
   runExecute = () => {
+    let self = this
+    console.log("ASYNC: start")
+    console.log("DATA:", this.getHookData())
+    this.setState({
+      executeInProgress: true
+    })
 
-  }
-
-  clearExecute = () => {
-
+    setTimeout(function() {
+      console.log("ASYNC: end")
+      self.setState({
+        executeInProgress: false
+      })
+    }, 2000)
   }
 
   render() {
-    console.log("OeOperation")
+    console.log("RENDER: OeOperation")
     let { operation, method, path, toolbox } = this.props
     let { getComponent, fn, specSelectors, getToolBoxedComponent } = toolbox
     // console.log('fn:', fn)
@@ -90,12 +97,12 @@ export default class OeOperation extends React.Component {
     let executeHooks = {
       getHookData: this.getHookData,
       updateResponse: this.updateResponse,
-      setExecuteProgress: this.setExecuteProgress
+      runExecute: this.runExecute
     }
 
     return (
         <div className={ deprecated ? "opblock opblock-deprecated" : (shown ? `opblock opblock-${method} is-open` : `opblock opblock-${method}`)}>
-          <div className={`opblock-summary opblock-summary-${method}`} onClick={ () => this.invertShown(shown) }>
+          <div className={`opblock-summary opblock-summary-${method}`} onClick={ this.toggleShown }>
             <span className="opblock-summary-method">{method.toUpperCase()}</span>
             <span className={ deprecated ? "opblock-summary-path__deprecated" : "opblock-summary-path" } >
               <span>{path}</span>
@@ -123,11 +130,11 @@ export default class OeOperation extends React.Component {
                   fn={ fn }
                 />
               </div>
-              {
-                this.state.executeInProgress ? <span>Executing...</span> : null
-              }
-              <Responses response={ this.state.response } operation={ operation } />
             </div>
+            {
+              this.state.executeInProgress ? <div>Executing...</div> : null
+            }
+            <Responses response={ this.state.response } operation={ operation } />
           </Collapse>
         </div>
       )

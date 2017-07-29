@@ -14,18 +14,18 @@ export default class OeParamBody extends React.Component {
   }
 
   refCallback = (ctrl) => {
-    console.log('refCb')
+    // console.log('refCb')
     let { opToolbox , param } = this.props
     this.cache["ctrl"] = ctrl
     // console.log(this.props)
     opToolbox.addHook(param.get("name"), ctrl)
   }
 
-  tbxChange = (e) => {
-    let { value } = e.target
-    this.setState({ bodyContent: value })
-    console.log("change")
-  }
+  // tbxChange = (e) => {
+  //   let { value } = e.target
+  //   this.setState({ bodyContent: value })
+  //   console.log("change")
+  // }
 
   clear = () => {
     this.cache["ctrl"].value = ""
@@ -49,7 +49,7 @@ export default class OeParamBody extends React.Component {
   }
 
   render() {
-    console.log("OeParamBody")
+    console.log("RENDER: OeParamBody")
     let { opToolbox , consumes, param } = this.props
     let handleChange = (e) => {
       let select = e.target
@@ -72,7 +72,7 @@ export default class OeParamBody extends React.Component {
           </ul>
         </div>
         <div>
-          <textarea className="body-param__text" ref={ this.refCallback } value={ this.state.bodyContent } onChange={ this.tbxChange }></textarea>
+          <textarea className="body-param__text" ref={ this.refCallback } /*value={ this.state.bodyContent } onChange={ this.tbxChange }*/></textarea>
           <div>
             <label>
                 <small><strong>Parameter content type</strong></small>
