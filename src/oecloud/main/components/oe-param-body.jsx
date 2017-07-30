@@ -67,6 +67,8 @@ export default class OeParamBody extends React.Component {
       let i = select.selectedIndex
       let v = select.options[i].value
       this.setConsumesValue(v)
+
+      //TODO: move this to parent component state
       opToolbox.setCacheData("consumes_value", v)
     }
 
@@ -109,7 +111,7 @@ export default class OeParamBody extends React.Component {
           </div>
         </div>
         <div style={ {display: this.state.currentTab === "model" ? "block" : "none"} }>
-          <div style={ { "overflow-y" : "auto", "padding": "3px", "max-height" : "205px"} }>
+          <div style={ { "overflowY" : "auto", "padding": "3px", "maxHeight" : "205px"} }>
             <Model schema={ schema }
              getComponent={ getComponent }
              specSelectors={ specSelectors }

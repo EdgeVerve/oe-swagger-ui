@@ -7,15 +7,6 @@ const eachMap = (iterable, fn) => iterable.valueSeq().filter(Im.Map.isMap).map(f
 
 export default class OeParameters extends Component {
 
-  constructor(...args) {
-    super(...args)
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log("parameters should update")
-    return true
-  }
-
   getParametersUi(parameters, path, method, opToolbox, consumes, getComponent, fn, specSelectors) {
     // let { path, method, opToolbox: {clearHooks}, consumes } = this.props
     let ParameterRow = getComponent("OeParameterRow")

@@ -1,20 +1,34 @@
 import React, { PropTypes } from "react"
-import { getList } from "core/utils"
+import { getList, fromJSOrdered } from "core/utils"
+import parseUrl from "url-parse"
+
 
 export default class OeOperation extends React.Component {
 
 	constructor(props, context) {
     super(props, context)
+
+    let operation = props.operation
+    let consumesValue = operation.get("consumes_value") || operation.get("consumes").get(0)
+    let producesValue = operation.get("consumes_value") || operation.get("consumes").get(0)
     this.state = {
       shown: false,
+      executeInProgress: false,
       response: null,
-      executeInProgress: false
+      request: null,
+      consumesValue: consumesValue,
+      producesValue: producesValue
     }
     this.hooks = []
     this.dataCache = {}
+    this.setCacheData("consumes_value", consumesValue)
+    this.setCacheData("produces_value", producesValue)
   }
 
-  clearHooks = () => { this.hooks = [] }
+  clearHooks = () => {
+    console.log('Clear Hooks')
+    // this.hooks = []
+  }
 
   addHook = (name, ctrl, isXml) => {
     console.log('AddHook:', { name, ctrl, isXml })
@@ -53,16 +67,68 @@ export default class OeOperation extends React.Component {
     let self = this
     console.log("ASYNC: start")
     console.log("DATA:", this.getHookData())
-    this.setState({
-      executeInProgress: true
+    let { toolbox, path, method, operation } = this.props
+    let { specSelectors, fn, authSelectors } = toolbox
+
+    let spec = specSelectors.spec().toJS()
+    let scheme = specSelectors.operationScheme(path, method)
+    let requestContentType = this.dataCache["consumes_value"]
+    let responseContentType = this.dataCache["produces_value"]
+    let hookData = this.getHookData()
+    let parameters = hookData.reduce((hash, p) => {
+      return Object.assign({}, hash, { [p.name] : p.value })
+    }, {})
+
+    let opParameters = operation.get("parameters").toJS().reduce((hash, p) => {
+      // let hookEquivalent = hookData[p.name]
+      let value = /xml/i.test(requestContentType) ? p.value_xml : p.value
+      return Object.assign({}, hash, { [p.name] : value })
     })
 
-    setTimeout(function() {
-      console.log("ASYNC: end")
-      self.setState({
-        executeInProgress: false
+    //final parameters
+    parameters = Object.assign({}, opParameters, parameters)
+
+    let contextUrl = parseUrl(specSelectors.url()).toString()
+    let operationId = operation.get("operationId") || fn.odId(operation.toJS(), path, method)
+    let securities = {
+      authorized: authSelectors.authorized() && authSelectors.authorized().toJS(),
+      definitions: specSelectors.securityDefinitions() && specSelectors.securityDefinitions().toJS(),
+      specSecurity:  specSelectors.security() && specSelectors.security().toJS()
+    }
+    let req = {
+      spec,
+      scheme,
+      requestContentType,
+      responseContentType,
+      parameters,
+      contextUrl,
+      operationId,
+      securities
+    }
+
+    let parsedRequest = fn.buildRequest(req)
+    //TODO: log here if you like...
+    self.setState({
+      executeInProgress: true,
+      request: fromJSOrdered(parsedRequest)
+    })
+
+    fn.execute(req)
+      .then(res => {
+        console.log("ASYNC: end")
+        self.setState({
+          response: fromJSOrdered(res),
+          executeInProgress: false
+        })
       })
-    }, 2000)
+      .catch(res => {
+        self.setState({
+          response:res,
+          executeInProgress: false
+        })
+      })
+
+
   }
 
   render() {
@@ -86,6 +152,9 @@ export default class OeOperation extends React.Component {
     let parameters = getList(operation, ["parameters"])
     let consumes = operation.get("consumes")
 
+    let response = this.state.response
+    let request = this.state.request
+
     let shown = this.state.shown
 
     let parameterHooks = {
@@ -97,7 +166,8 @@ export default class OeOperation extends React.Component {
     let executeHooks = {
       getHookData: this.getHookData,
       updateResponse: this.updateResponse,
-      runExecute: this.runExecute
+      runExecute: this.runExecute,
+      setCacheData: this.setCacheData
     }
 
     return (
@@ -120,6 +190,7 @@ export default class OeOperation extends React.Component {
                 method={ method }
                 opToolbox= { parameterHooks }
                 consumes={ consumes }
+                consumesValue={ this.state.consumesValue }
                 getComponent={ getComponent }
                 fn={ fn }
                 specSelectors={ specSelectors }
@@ -133,11 +204,27 @@ export default class OeOperation extends React.Component {
                   fn={ fn }
                 />
               </div>
+              {
+                this.state.executeInProgress ? <div className="loading-container"><div className="loading"></div></div> : null
+              }
+              {
+                !responses ? null : <Responses
+                                      responses={ responses }
+                                      request={ request }
+                                      operation={ operation }
+                                      response={ response }
+                                      pathMethod={ [path, method] }
+                                      produces={ produces }
+                                      producesValue={ this.state.producesValue }
+                                      specSelectors={ specSelectors }
+                                      getComponent={getComponent}
+                                      fn={fn}
+                                      setCacheData={ this.setCacheData }
+                                    />
+              }
             </div>
-            {
-              this.state.executeInProgress ? <div>Executing...</div> : null
-            }
-            <Responses response={ this.state.response } operation={ operation } />
+
+
           </Collapse>
         </div>
       )

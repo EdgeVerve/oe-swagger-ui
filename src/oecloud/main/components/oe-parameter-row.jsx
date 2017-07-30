@@ -9,7 +9,7 @@ export default class OeParameterRow extends Component {
   refCallback = (ctrl) => {
     let { opToolbox: { addHook }, param } = this.props
 
-    addHook(param.get(name), ctrl)
+    addHook(param.get("name"), ctrl)
   }
 
   renderTextArea(consumes, opToolbox, getComponent, param, fn, specSelectors) {
@@ -17,7 +17,12 @@ export default class OeParameterRow extends Component {
     let ParamBody = getComponent("OeParamBody")
 
     return (
-      <ParamBody consumes={ consumes } opToolbox={ opToolbox } fn={ fn } param={ param } getComponent={getComponent} specSelectors={ specSelectors } />
+      <ParamBody consumes={ consumes }
+        opToolbox={ opToolbox }
+        fn={ fn } param={ param }
+        getComponent={getComponent}
+        specSelectors={ specSelectors }
+      />
     )
   }
 
@@ -52,7 +57,7 @@ export default class OeParameterRow extends Component {
     let description = param.get("description") ? `${param.get("name")} - ${param.get("description")}` : `${param.get("name")}`
     let format = param.get("format")
     return (
-      <input type={ format === "password" ? "password" : "text" } placeholder={ description } disabled={isDisabled} />
+      <input type={ format === "password" ? "password" : "text" } placeholder={ description } disabled={isDisabled} ref={ this.refCallback }/>
     )
 
 

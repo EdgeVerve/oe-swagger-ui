@@ -18,7 +18,7 @@ export default class OeTag extends React.Component {
     console.log("RENDER: OeTag")
     let { operations, tagName, tagDesc , toolbox } = this.props
     // let getComponent = toolbox.getComponent
-    let { getComponent, getToolBoxedComponent } = toolbox
+    let { getComponent, getToolBoxedComponent, specSelectors } = toolbox
 
     let Collapse = getComponent("Collapse")
     let TaggedOp = getToolBoxedComponent("OeOperation")
@@ -44,7 +44,7 @@ export default class OeTag extends React.Component {
                 operations.sort(operationsSorter).map( op => {
                   let method =  op.get("method")
                   let path = op.get("path")
-                  let key = ["operations", path, method].join('-')
+                  let key = ["operations", path, method]
                   return <TaggedOp
                       key={ key }
                       method={method}
