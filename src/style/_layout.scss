@@ -369,6 +369,43 @@ body
     }
 }
 
+.tab-display
+{
+  display: flex;
+  margin: 20px 0 10px 0;
+  padding: 0;
+
+  list-style-type: none;
+
+  li
+  {
+      font-size:12px;
+      padding: 0;
+      cursor: pointer;
+
+      @include text_headline();
+
+      &:after
+      {
+        content: '|';
+        padding: 0 5px 0 5px;
+        font-weight: normal;
+      }
+
+      &.active
+      {
+        font-weight: bold;
+      }
+
+      &:last-of-type {
+        &:after
+        {
+          display:none
+        }
+      }
+  }
+}
+
 .opblock-description-wrapper,
 .opblock-title_normal
 {

@@ -12,14 +12,12 @@ export default class OeParameterRow extends Component {
     addHook(param.get(name), ctrl)
   }
 
-
-
-  renderTextArea(consumes, opToolbox, getComponent, param, fn) {
+  renderTextArea(consumes, opToolbox, getComponent, param, fn, specSelectors) {
 
     let ParamBody = getComponent("OeParamBody")
 
     return (
-      <ParamBody consumes={ consumes } opToolbox={ opToolbox } fn={ fn } param={ param } />
+      <ParamBody consumes={ consumes } opToolbox={ opToolbox } fn={ fn } param={ param } getComponent={getComponent} specSelectors={ specSelectors } />
     )
   }
 
@@ -63,7 +61,7 @@ export default class OeParameterRow extends Component {
 
   render() {
     console.log("RENDER: OeParameterRow")
-    let { param, opToolbox, getComponent, consumes, fn } = this.props
+    let { param, opToolbox, getComponent, consumes, fn, specSelectors } = this.props
 
     let inType = param.get("in")
     let Markdown = getComponent("Markdown")
@@ -88,7 +86,7 @@ export default class OeParameterRow extends Component {
           {(isFormData && !isFormDataSupported) && <div>Error: your browser does not support FormData</div>}
 
           {
-            inType === "body" ? this.renderTextArea(consumes, opToolbox, getComponent, param, fn) : null
+            inType === "body" ? this.renderTextArea(consumes, opToolbox, getComponent, param, fn, specSelectors) : null
           }
 
           {

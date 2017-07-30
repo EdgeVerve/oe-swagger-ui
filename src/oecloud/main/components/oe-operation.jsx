@@ -122,6 +122,7 @@ export default class OeOperation extends React.Component {
                 consumes={ consumes }
                 getComponent={ getComponent }
                 fn={ fn }
+                specSelectors={ specSelectors }
               />
               <div className="execute-wrapper">
                 <Execute

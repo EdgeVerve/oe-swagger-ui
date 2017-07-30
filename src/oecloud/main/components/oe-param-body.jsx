@@ -9,7 +9,7 @@ export default class OeParamBody extends React.Component {
     super(props, context)
     this.cache = {}
     this.state = {
-      bodyContent: ""
+      currentTab: "input"
     }
   }
 
@@ -21,14 +21,9 @@ export default class OeParamBody extends React.Component {
     opToolbox.addHook(param.get("name"), ctrl)
   }
 
-  // tbxChange = (e) => {
-  //   let { value } = e.target
-  //   this.setState({ bodyContent: value })
-  //   console.log("change")
-  // }
-
   clear = () => {
     this.cache["ctrl"].value = ""
+    this.setState({currentTab: "input"})
   }
 
   getSample = (xml) => {
@@ -46,11 +41,27 @@ export default class OeParamBody extends React.Component {
 
   loadExample = () => {
     this.cache["ctrl"].value = this.getExample()
+    this.setState({
+      currentTab: "input"
+    })
+  }
+
+  showModel = () => {
+    this.setState({
+      currentTab: "model"
+    })
+  }
+
+  showInput = () => {
+    this.setState({
+      currentTab: "input"
+    })
   }
 
   render() {
     console.log("RENDER: OeParamBody")
-    let { opToolbox , consumes, param } = this.props
+    let { opToolbox , consumes, param, getComponent, specSelectors } = this.props
+    let schema = param.get("schema")
     let handleChange = (e) => {
       let select = e.target
       let i = select.selectedIndex
@@ -59,20 +70,31 @@ export default class OeParamBody extends React.Component {
       opToolbox.setCacheData("consumes_value", v)
     }
 
+    let Model = getComponent("model")
+
     return (
       <div>
         <div>
-          <ul className="tab">
+          <ul className="tab-display">
+            <li className={ (this.state.currentTab === "model") ? "tabitem active" : "tabitem" }>
+              <a className="tablinks" data-name="example" onClick={ this.showModel }>Show Model</a>
+            </li>
+            <li className={ (this.state.currentTab === "input") ? "tabitem active" : "tabitem" }>
+              <a className="tablinks" data-name="example" onClick={ this.showInput }>
+                Show Input
+              </a>
+            </li>
+
             <li className="tabitem">
-              <a className="tablinks" data-name="example" onClick={ this.loadExample }>Example Value</a>
+              <a className="tablinks" data-name="clear" onClick={ this.loadExample } >Load Example</a>
             </li>
             <li className="tabitem">
               <a className="tablinks" data-name="clear" onClick={ this.clear } >Clear</a>
             </li>
           </ul>
         </div>
-        <div>
-          <textarea className="body-param__text" ref={ this.refCallback } /*value={ this.state.bodyContent } onChange={ this.tbxChange }*/></textarea>
+        <div style={ {display: this.state.currentTab === "input" ? "block" : "none"} }>
+          <textarea className="body-param__text" ref={ this.refCallback }></textarea>
           <div>
             <label>
                 <small><strong>Parameter content type</strong></small>
@@ -84,6 +106,14 @@ export default class OeParamBody extends React.Component {
                   </select>
                 </div>
             </label>
+          </div>
+        </div>
+        <div style={ {display: this.state.currentTab === "model" ? "block" : "none"} }>
+          <div style={ { "overflow-y" : "auto", "padding": "3px", "max-height" : "205px"} }>
+            <Model schema={ schema }
+             getComponent={ getComponent }
+             specSelectors={ specSelectors }
+             expandDepth={ 1 } />
           </div>
         </div>
       </div>
