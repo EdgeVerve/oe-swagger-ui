@@ -53,7 +53,7 @@ export default class OeTag extends React.Component {
                     />
                 })
               :
-                ""
+                null
             }
           </Collapse>
         </div>

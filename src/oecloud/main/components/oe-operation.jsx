@@ -68,10 +68,10 @@ export default class OeOperation extends React.Component {
   render() {
     console.log("RENDER: OeOperation")
     let { operation, method, path, toolbox } = this.props
-    let { getComponent, fn, specSelectors, getToolBoxedComponent } = toolbox
+    let { getComponent, fn, specSelectors } = toolbox
     // console.log('fn:', fn)
     let Collapse = getComponent("Collapse")
-    let Parameters = getToolBoxedComponent("OeParameters")
+    let Parameters = getComponent("OeParameters")
     let Execute = getComponent("OeExecute")
     let Responses = getComponent("OeResponses")
 
@@ -120,6 +120,8 @@ export default class OeOperation extends React.Component {
                 method={ method }
                 opToolbox= { parameterHooks }
                 consumes={ consumes }
+                getComponent={ getComponent }
+                fn={ fn }
               />
               <div className="execute-wrapper">
                 <Execute

@@ -16,11 +16,10 @@ export default class OeParameters extends Component {
     return true
   }
 
-  getParametersUi(parameters, path, method, opToolbox, consumes, getComponent, toolbox) {
+  getParametersUi(parameters, path, method, opToolbox, consumes, getComponent, fn) {
     // let { path, method, opToolbox: {clearHooks}, consumes } = this.props
     let ParameterRow = getComponent("OeParameterRow")
     let { clearHooks } = opToolbox
-    let { fn } = toolbox
 
     clearHooks()
     return (
@@ -57,7 +56,7 @@ export default class OeParameters extends Component {
 
   render() {
     console.log("RENDER: OeParameters")
-    let { parameters, path, method, opToolbox, consumes, toolbox: {getComponent}, toolbox } = this.props
+    let { parameters, path, method, opToolbox, consumes, fn, getComponent } = this.props
 
     return (
       <div className="opblock-section">
@@ -68,7 +67,7 @@ export default class OeParameters extends Component {
           !parameters.count() ?
               (<div className="opblock-description-wrapper"><p>No parameters</p></div>)
             :
-              this.getParametersUi(parameters, path, method, opToolbox, consumes, getComponent, toolbox)
+              this.getParametersUi(parameters, path, method, opToolbox, consumes, getComponent, fn)
         }
       </div>
     )

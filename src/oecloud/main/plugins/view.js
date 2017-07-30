@@ -9,6 +9,7 @@ export default function(toolbox) {
         let Component = getComponent(componentName, container)
         return class extends React.Component {
           render() {
+            console.log(`RENDER: ${componentName} (ToolBoxed)`)
             return (<Component toolbox={ getSystem() } {...this.props } />)
           }
         }
