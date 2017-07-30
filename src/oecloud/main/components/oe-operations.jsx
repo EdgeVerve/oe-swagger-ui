@@ -5,7 +5,7 @@ import Im from "immutable"
 export default class OeOperations extends React.Component {
 
   render() {
-    console.log('RENDER: OeOperations')
+// console.log    console.log('RENDER: OeOperations')
     let {
       toolbox
     } = this.props

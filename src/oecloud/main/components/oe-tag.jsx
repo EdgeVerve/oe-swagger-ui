@@ -15,7 +15,7 @@ export default class OeTag extends React.Component {
   }
 
   render() {
-    console.log("RENDER: OeTag")
+// console.log    console.log("RENDER: OeTag")
     let { operations, tagName, tagDesc , toolbox } = this.props
     // let getComponent = toolbox.getComponent
     let { getComponent, getToolBoxedComponent, specSelectors } = toolbox

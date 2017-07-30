@@ -59,7 +59,7 @@ export default class OeParamBody extends React.Component {
   }
 
   render() {
-    console.log("RENDER: OeParamBody")
+// console.log    console.log("RENDER: OeParamBody")
     let { opToolbox , consumes, param, getComponent, specSelectors } = this.props
     let schema = param.get("schema")
     let handleChange = (e) => {

@@ -65,7 +65,7 @@ export default class OeParameterRow extends Component {
 
 
   render() {
-    console.log("RENDER: OeParameterRow")
+// console.log    console.log("RENDER: OeParameterRow")
     let { param, opToolbox, getComponent, consumes, fn, specSelectors } = this.props
 
     let inType = param.get("in")

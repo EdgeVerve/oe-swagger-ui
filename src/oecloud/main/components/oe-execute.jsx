@@ -11,7 +11,7 @@ export default class OeExecute extends Component {
   }
 
   render() {
-    console.log("RENDER: OeExecute")
+// console.log    console.log("RENDER: OeExecute")
     return (
       <button className="btn execute opblock-control__btn" type="button" onClick={ this.onExecute }>
         Execute

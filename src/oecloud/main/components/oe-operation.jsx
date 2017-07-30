@@ -26,12 +26,12 @@ export default class OeOperation extends React.Component {
   }
 
   clearHooks = () => {
-    console.log('Clear Hooks')
+// console.log    console.log('Clear Hooks')
     // this.hooks = []
   }
 
   addHook = (name, ctrl, isXml) => {
-    console.log('AddHook:', { name, ctrl, isXml })
+// console.log    console.log('AddHook:', { name, ctrl, isXml })
     // ctrl ? this.hooks.push({ name, ctrl, isXml }) : NOOP()
     if (ctrl) {
       this.hooks.push({ name, ctrl, isXml })
@@ -39,7 +39,7 @@ export default class OeOperation extends React.Component {
   }
 
   getHookData = () => {
-    console.log('getHookData:')
+// console.log    console.log('getHookData:')
     return this.hooks.map( hook => {
       let { name, ctrl } = hook
       let value = null
@@ -65,8 +65,8 @@ export default class OeOperation extends React.Component {
 
   runExecute = () => {
     let self = this
-    console.log("ASYNC: start")
-    console.log("DATA:", this.getHookData())
+// console.log    console.log("ASYNC: start")
+// console.log    console.log("DATA:", this.getHookData())
     let { toolbox, path, method, operation } = this.props
     let { specSelectors, fn, authSelectors } = toolbox
 
@@ -115,7 +115,7 @@ export default class OeOperation extends React.Component {
 
     fn.execute(req)
       .then(res => {
-        console.log("ASYNC: end")
+// console.log        console.log("ASYNC: end")
         self.setState({
           response: fromJSOrdered(res),
           executeInProgress: false
@@ -132,7 +132,7 @@ export default class OeOperation extends React.Component {
   }
 
   render() {
-    console.log("RENDER: OeOperation")
+// console.log    console.log("RENDER: OeOperation")
     let { operation, method, path, toolbox } = this.props
     let { getComponent, fn, specSelectors } = toolbox
     // console.log('fn:', fn)

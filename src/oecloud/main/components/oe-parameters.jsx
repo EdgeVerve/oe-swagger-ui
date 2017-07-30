@@ -47,7 +47,7 @@ export default class OeParameters extends Component {
   }
 
   render() {
-    console.log("RENDER: OeParameters")
+// console.log    console.log("RENDER: OeParameters")
     let { parameters, path, method, opToolbox, consumes, fn, getComponent, specSelectors } = this.props
 
     return (
