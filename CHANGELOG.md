@@ -1,3 +1,7 @@
+## 20170731, v0.9.1
+- usability and performance fixes
+- versioning made inline with oe-cloud project
+
 ## 20170714, v0.2.2
 - fixes the _isDefaultDelete field from setting itself to a `true` value in the ui
 - fixes - when execute button click on a remote method with no parameters, it fails
