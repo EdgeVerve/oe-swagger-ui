@@ -1,7 +1,7 @@
 import React, { PropTypes } from "react"
 import { getList, fromJSOrdered } from "core/utils"
 import parseUrl from "url-parse"
-
+import serializeError from "serialize-error"
 
 export default class OeOperation extends React.Component {
 
@@ -121,9 +121,10 @@ export default class OeOperation extends React.Component {
           executeInProgress: false
         })
       })
-      .catch(res => {
+      .catch(err => {
         self.setState({
-          response:res,
+          response: fromJSOrdered(Object.assign(
+            { error: true, headers: {} }, serializeError(err))),
           executeInProgress: false
         })
       })

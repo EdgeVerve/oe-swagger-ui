@@ -87,7 +87,7 @@ export default class OeParameterRow extends Component {
         </td>
 
         <td className="col parameters-col_description">
-          <Markdown source={ param.get("description") } />
+          <Markdown source={ param.get("description") || "" } />
           {(isFormData && !isFormDataSupported) && <div>Error: your browser does not support FormData</div>}
 
           {
