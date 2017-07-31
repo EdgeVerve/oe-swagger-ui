@@ -23,6 +23,12 @@ export default class OeOperation extends React.Component {
     this.dataCache = {}
     this.setCacheData("consumes_value", consumesValue)
     this.setCacheData("produces_value", producesValue)
+    this.setCacheData("paramCache", {})
+  }
+
+  updateParam = (name, value) => {
+    let currentCache = this.dataCache["paramCache"]
+    currentCache[name] = value
   }
 
   clearHooks = () => {
@@ -74,10 +80,8 @@ export default class OeOperation extends React.Component {
     let scheme = specSelectors.operationScheme(path, method)
     let requestContentType = this.dataCache["consumes_value"]
     let responseContentType = this.dataCache["produces_value"]
-    let hookData = this.getHookData()
-    let parameters = hookData.reduce((hash, p) => {
-      return Object.assign({}, hash, { [p.name] : p.value })
-    }, {})
+
+    let parameters;
 
     let opParameters = operation.get("parameters").toJS().reduce((hash, p) => {
       // let hookEquivalent = hookData[p.name]
@@ -86,7 +90,7 @@ export default class OeOperation extends React.Component {
     })
 
     //final parameters
-    parameters = Object.assign({}, opParameters, parameters)
+    parameters = Object.assign({}, opParameters, this.dataCache["paramsCache"])
 
     let contextUrl = parseUrl(specSelectors.url()).toString()
     let operationId = operation.get("operationId") || fn.odId(operation.toJS(), path, method)
@@ -161,7 +165,8 @@ export default class OeOperation extends React.Component {
     let parameterHooks = {
       clearHooks: this.clearHooks,
       addHook: this.addHook,
-      setCacheData: this.setCacheData
+      setCacheData: this.setCacheData,
+      updateParam: this.updateParam
     }
 
     let executeHooks = {
@@ -195,6 +200,7 @@ export default class OeOperation extends React.Component {
                 getComponent={ getComponent }
                 fn={ fn }
                 specSelectors={ specSelectors }
+                paramsCache={ this.dataCache["paramCache"] }
               />
               <div className="execute-wrapper">
                 <Execute

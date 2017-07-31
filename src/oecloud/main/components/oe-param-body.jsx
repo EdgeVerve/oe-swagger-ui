@@ -8,22 +8,34 @@ export default class OeParamBody extends React.Component {
   constructor(props, context) {
     super(props, context)
     this.cache = {}
+    let value = props.value
+
+    value = value || (value.length ? value : this.getExample())
     this.state = {
-      currentTab: "input"
+      currentTab: "input",
+      bodyContent: value
     }
   }
 
-  refCallback = (ctrl) => {
-    // console.log('refCb')
-    let { opToolbox , param } = this.props
-    this.cache["ctrl"] = ctrl
-    // console.log(this.props)
-    opToolbox.addHook(param.get("name"), ctrl)
+  onTxtChange = (e) => {
+    let {opToolbox, param} = this.props
+
+    this.setState({
+      bodyContent: e.target.value
+    })
+
+    opToolbox.updateParam(param.get("name"), e.target.value)
   }
 
-  clear = () => {
-    this.cache["ctrl"].value = ""
-    this.setState({currentTab: "input"})
+  onContentTypeChange = (e) => {
+    let select = e.target
+    let i = select.selectedIndex
+    let v = select.options[i].value
+
+
+    //TODO: move this to parent component state
+    this.props.opToolbox.setCacheData("consumes_value", v)
+    this.setConsumesValue(v)
   }
 
   getSample = (xml) => {
@@ -32,18 +44,19 @@ export default class OeParamBody extends React.Component {
     return getSampleSchema(schema, xml)
   }
 
-  setConsumesValue = (value) => { this.cache["consumes_value"] = value }
+  setConsumesValue = (value) => {
+    this.cache["consumes_value"] = value //TODO: refactor usage of this.cache...have it in state
+    let { opToolbox, param } = this.props
+    opToolbox.updateParam(param.get("name"), this.getExample())
+    this.setState({
+      bodyContent: this.getExample()
+    })
+
+  }
 
   getExample() {
     let consumesValue = this.cache["consumes_value"] || this.props.consumes.get(0)
     return this.getSample(consumesValue)
-  }
-
-  loadExample = () => {
-    this.cache["ctrl"].value = this.getExample()
-    this.setState({
-      currentTab: "input"
-    })
   }
 
   showModel = () => {
@@ -62,15 +75,6 @@ export default class OeParamBody extends React.Component {
 // console.log    console.log("RENDER: OeParamBody")
     let { opToolbox , consumes, param, getComponent, specSelectors } = this.props
     let schema = param.get("schema")
-    let handleChange = (e) => {
-      let select = e.target
-      let i = select.selectedIndex
-      let v = select.options[i].value
-      this.setConsumesValue(v)
-
-      //TODO: move this to parent component state
-      opToolbox.setCacheData("consumes_value", v)
-    }
 
     let Model = getComponent("model")
 
@@ -86,22 +90,15 @@ export default class OeParamBody extends React.Component {
                 Show Input
               </a>
             </li>
-
-            <li className="tabitem">
-              <a className="tablinks" data-name="clear" onClick={ this.loadExample } >Load Example</a>
-            </li>
-            <li className="tabitem">
-              <a className="tablinks" data-name="clear" onClick={ this.clear } >Clear</a>
-            </li>
           </ul>
         </div>
         <div style={ {display: this.state.currentTab === "input" ? "block" : "none"} }>
-          <textarea className="body-param__text" ref={ this.refCallback }></textarea>
+          <textarea className="body-param__text" value={ this.state.bodyContent } onChange={ this.onTxtChange }></textarea>
           <div>
             <label>
                 <small><strong>Parameter content type</strong></small>
                 <div className="content-type-wrapper body-param-content-type">
-                  <select className="content-type" onChange={ handleChange }>
+                  <select className="content-type" onChange={ this.onContentTypeChange }>
                     {
                       consumes.map(s => <option key={s} value={s}>{s}</option>)
                     }

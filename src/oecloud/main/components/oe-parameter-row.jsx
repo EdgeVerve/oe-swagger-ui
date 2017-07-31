@@ -4,15 +4,39 @@ import win from "core/window"
 
 export default class OeParameterRow extends Component {
 
-  constructor(...args) { super(...args) }
+  constructor(...args) {
+    super(...args)
 
-  refCallback = (ctrl) => {
-    let { opToolbox: { addHook }, param } = this.props
-
-    addHook(param.get("name"), ctrl)
+    this.state= {
+      value: this.props.value || ""
+    }
   }
 
-  renderTextArea(consumes, opToolbox, getComponent, param, fn, specSelectors) {
+  onChange = (e) => {
+    let ctrl = e.target
+    let value;
+
+    if (ctrl instanceof HTMLSelectElement) {
+      let index = ctrl.selectedIndex
+      value = ctrl.options[index].value
+    }
+    else {
+      value = ctrl.value
+    }
+
+    this.setState({
+      value: value
+    })
+
+    let { opToolbox, param } = this.props
+
+    let name = param.get("name")
+
+    opToolbox.updateParam(name, value)
+
+  }
+
+  renderTextArea(consumes, opToolbox, getComponent, param, fn, specSelectors, consumesValue) {
 
     let ParamBody = getComponent("OeParamBody")
 
@@ -22,6 +46,8 @@ export default class OeParameterRow extends Component {
         fn={ fn } param={ param }
         getComponent={getComponent}
         specSelectors={ specSelectors }
+        value={ this.state.value }
+        consumesValue={ consumesValue }
       />
     )
   }
@@ -33,7 +59,7 @@ export default class OeParameterRow extends Component {
 
     if (enumValue) {
       return (
-        <select ref= { this.refCallback }>
+        <select onChange={ this.onChange } defaultValue={this.state.value}>
           {
             required ? null : <option value="">--</option>
           }
@@ -51,13 +77,20 @@ export default class OeParameterRow extends Component {
     if (type === "file") {
 
       return (
-        <input type="file" ref={ this.refCallback } disabled={isDisabled} />
+        <input type="file" onChange={ this.onChange }
+          disabled={isDisabled}
+        />
       )
     }
     let description = param.get("description") ? `${param.get("name")} - ${param.get("description")}` : `${param.get("name")}`
     let format = param.get("format")
     return (
-      <input type={ format === "password" ? "password" : "text" } placeholder={ description } disabled={isDisabled} ref={ this.refCallback }/>
+      <input type={ format === "password" ? "password" : "text" }
+        placeholder={ description }
+        disabled={isDisabled}
+        value={ this.state.value }
+        onChange={ this.onChange }
+      />
     )
 
 
@@ -66,7 +99,7 @@ export default class OeParameterRow extends Component {
 
   render() {
 // console.log    console.log("RENDER: OeParameterRow")
-    let { param, opToolbox, getComponent, consumes, fn, specSelectors } = this.props
+    let { param, opToolbox, getComponent, consumes, fn, specSelectors, value, consumesValue } = this.props
 
     let inType = param.get("in")
     let Markdown = getComponent("Markdown")
@@ -91,11 +124,11 @@ export default class OeParameterRow extends Component {
           {(isFormData && !isFormDataSupported) && <div>Error: your browser does not support FormData</div>}
 
           {
-            inType === "body" ? this.renderTextArea(consumes, opToolbox, getComponent, param, fn, specSelectors) : null
+            inType === "body" ? this.renderTextArea(consumes, opToolbox, getComponent, param, fn, specSelectors, value, consumesValue) : null
           }
 
           {
-            inType !== "body" ? this.renderRequiredInput(param) : null
+            inType !== "body" ? this.renderRequiredInput(param, value) : null
           }
         </td>
       </tr>

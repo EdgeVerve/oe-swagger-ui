@@ -7,7 +7,7 @@ const eachMap = (iterable, fn) => iterable.valueSeq().filter(Im.Map.isMap).map(f
 
 export default class OeParameters extends Component {
 
-  getParametersUi(parameters, path, method, opToolbox, consumes, getComponent, fn, specSelectors) {
+  getParametersUi(parameters, path, method, opToolbox, consumes, getComponent, fn, specSelectors, paramsCache, consumesValue) {
     // let { path, method, opToolbox: {clearHooks}, consumes } = this.props
     let ParameterRow = getComponent("OeParameterRow")
     let { clearHooks } = opToolbox
@@ -36,6 +36,8 @@ export default class OeParameters extends Component {
                                                                                 consumes={ consumes }
                                                                                 fn={ fn }
                                                                                 specSelectors={ specSelectors }
+                                                                                value={ paramsCache[parameter.get("name")] }
+                                                                                consumesValue={ consumesValue }
                                                                               />)
 
                 })
@@ -48,7 +50,7 @@ export default class OeParameters extends Component {
 
   render() {
 // console.log    console.log("RENDER: OeParameters")
-    let { parameters, path, method, opToolbox, consumes, fn, getComponent, specSelectors } = this.props
+    let { parameters, path, method, opToolbox, consumes, fn, getComponent, specSelectors, paramsCache, consumesValue } = this.props
 
     return (
       <div className="opblock-section">
@@ -59,7 +61,7 @@ export default class OeParameters extends Component {
           !parameters.count() ?
               (<div className="opblock-description-wrapper"><p>No parameters</p></div>)
             :
-              this.getParametersUi(parameters, path, method, opToolbox, consumes, getComponent, fn, specSelectors)
+              this.getParametersUi(parameters, path, method, opToolbox, consumes, getComponent, fn, specSelectors, paramsCache, consumesValue)
         }
       </div>
     )
