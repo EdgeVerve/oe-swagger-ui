@@ -87,10 +87,10 @@ export default class OeOperation extends React.Component {
       // let hookEquivalent = hookData[p.name]
       let value = /xml/i.test(requestContentType) ? p.value_xml : p.value
       return Object.assign({}, hash, { [p.name] : value })
-    })
+    }, {})
 
     //final parameters
-    parameters = Object.assign({}, opParameters, this.dataCache["paramsCache"])
+    parameters = Object.assign({}, opParameters, this.dataCache["paramCache"])
 
     let contextUrl = parseUrl(specSelectors.url()).toString()
     let operationId = operation.get("operationId") || fn.odId(operation.toJS(), path, method)
