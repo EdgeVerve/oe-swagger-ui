@@ -5,6 +5,7 @@ const isXml = (val) => /xml/i.test(val)
 
 export default class OeParamBody extends React.Component {
 
+
   constructor(props, context) {
     super(props, context)
     this.cache = {}
@@ -25,6 +26,10 @@ export default class OeParamBody extends React.Component {
     })
 
     opToolbox.updateParam(param.get("name"), e.target.value)
+  }
+
+  refCallback = (tbx) => {
+    this.tbx = tbx
   }
 
   onContentTypeChange = (e) => {
@@ -71,6 +76,12 @@ export default class OeParamBody extends React.Component {
     })
   }
 
+  componentDidMount() {
+    this.tbx.focus()
+    this.tbx.selectionStart = 0
+    this.tbx.selectionEnd = 0
+  }
+
   render() {
 // console.log    console.log("RENDER: OeParamBody")
     let { opToolbox , consumes, param, getComponent, specSelectors } = this.props
@@ -82,18 +93,19 @@ export default class OeParamBody extends React.Component {
       <div>
         <div>
           <ul className="tab-display">
-            <li className={ (this.state.currentTab === "model") ? "tabitem active" : "tabitem" }>
-              <a className="tablinks" data-name="example" onClick={ this.showModel }>Show Model</a>
-            </li>
+
             <li className={ (this.state.currentTab === "input") ? "tabitem active" : "tabitem" }>
               <a className="tablinks" data-name="example" onClick={ this.showInput }>
-                Show Input
+                Example Value
               </a>
+            </li>
+            <li className={ (this.state.currentTab === "model") ? "tabitem active" : "tabitem" }>
+              <a className="tablinks" data-name="example" onClick={ this.showModel }>Model</a>
             </li>
           </ul>
         </div>
         <div style={ {display: this.state.currentTab === "input" ? "block" : "none"} }>
-          <textarea className="body-param__text" value={ this.state.bodyContent } onChange={ this.onTxtChange }></textarea>
+          <textarea spellCheck="false" ref={ this.refCallback } className="body-param__text" value={ this.state.bodyContent } onChange={ this.onTxtChange }></textarea>
           <div>
             <label>
                 <small><strong>Parameter content type</strong></small>
@@ -108,7 +120,7 @@ export default class OeParamBody extends React.Component {
           </div>
         </div>
         <div style={ {display: this.state.currentTab === "model" ? "block" : "none"} }>
-          <div style={ { "overflowY" : "auto", "padding": "3px", "maxHeight" : "205px"} }>
+          <div style={ { "overflowY" : "auto", "padding": "3px", "maxHeight" : "280px", overflowX: "hidden"} }>
             <Model schema={ schema }
              getComponent={ getComponent }
              specSelectors={ specSelectors }
