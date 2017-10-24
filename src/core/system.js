@@ -141,7 +141,8 @@ export default class Store {
 
   getActions() {
     let actionHolders = this.getType("actions")
-
+    //  Note: in any actions.js file we may have defined
+    //  constants. Below we are filtering them out.
     return objMap(actionHolders, (actions) => {
       return objReduce(actions, (action, actionName) => {
         if(isFn(action))
@@ -151,7 +152,26 @@ export default class Store {
   }
 
   getWrappedAndBoundActions(dispatch) {
+
+
     let actionGroups = this.getBoundActions(dispatch)
+    //  Note: actionsGroups is now an object.
+    // For e.g.
+    // statePlugins = {
+    //   todo: {
+    //     actions: {...},
+    //     reducers: {...},
+    //     selectors: {...}
+    //   },
+    //   layout: {...}
+    // }
+
+    // your actionsGroups will now look like
+
+    // actionGroups = {
+    //   todoActions: {...},
+    //   layoutActions: {...}
+    // }
       return objMap(actionGroups, (actions, actionGroupName) => {
         let wrappers = this.system.statePlugins[actionGroupName.slice(0,-7)].wrapActions
           if(wrappers) {
@@ -230,6 +250,8 @@ export default class Store {
 
     const process = creator =>{
 
+      //  Note: we can expect creator to not be a function
+      //  initially
       if( typeof( creator ) !== "function" ) {
         return objMap(creator, prop => process(prop))
       }
@@ -248,6 +270,10 @@ export default class Store {
       }
 
     }
+
+    //  Note: actionCreator is initially an object
+    //  hence process( actionCreator ) returns an object.
+    //  See bindActionCreators API
     return objMap(this.getActions(), actionCreator => bindActionCreators( process( actionCreator ), dispatch ) )
   }
 
@@ -329,18 +355,39 @@ function systemExtend(dest={}, src={}) {
   return deepExtend(dest, src)
 }
 
-function buildReducer(states) {
+function buildReducer(states) { //this.system.statePlugins is argument passed here
   let reducerObj = objMap(states, (val) => {
     return val.reducers
   })
+
+  // Note: reducerObj is something like:
+  // {
+  //   layout: {...},
+  //   spec: {...},
+  // }
+
+  // where each prop is the corresponding branch's
+  // reducers
   return allReducers(reducerObj)
 }
 
 function allReducers(reducerSystem) {
   let reducers = Object.keys(reducerSystem).reduce((obj, key) => {
+    // reducerSystem[key] will be the reducer object
+    // for the branch
     obj[key] = makeReducer(reducerSystem[key])
     return obj
   },{})
+
+  // reducers is now like
+  //
+  // {
+  //   layout: (state, action) => {...},
+  //   spec: (state, action) => {...}
+  // }
+  //
+  // this looks much like our traditional
+  // redux reducer
 
   if(!Object.keys(reducers).length) {
     return idFn
