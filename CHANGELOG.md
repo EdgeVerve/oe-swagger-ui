@@ -1,3 +1,7 @@
+## 20171205, v0.9.2
+- fixed bug in curl command output not being updated if the request parameters are modified and post request re-execution.
+
+
 ## 20170731, v0.9.1
 - usability and performance fixes
 - versioning made inline with oe-cloud project
